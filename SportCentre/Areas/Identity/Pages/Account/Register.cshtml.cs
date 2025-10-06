@@ -117,7 +117,7 @@ namespace SportCentre.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            await RoleSeeder.SeedRolesAsync(_roleManager);
+            await RoleSeeder.SeedRolesAsync(_roleManager);////////////////
 
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -129,11 +129,10 @@ namespace SportCentre.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                //await _userManager.AddToRoleAsync(user, "User");//////
 
                 if (result.Succeeded)
                 {
-                     await _userManager.AddToRoleAsync(user, Input.Role);
+                     await _userManager.AddToRoleAsync(user, Input.Role);/////////
 
                     _logger.LogInformation("User created a new account with password.");
 
