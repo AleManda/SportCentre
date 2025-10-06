@@ -19,11 +19,13 @@ namespace SportCentre.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
         {
+            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -135,6 +137,22 @@ namespace SportCentre.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+
+        public async Task<string> getUserRole(string email, string password)
+        {
+            List<string> roles = new();
+
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user != null)
+            {
+                roles = (List<string>)await _userManager.GetRolesAsync(user);
+            }
+     ;
+            
         }
     }
 }
