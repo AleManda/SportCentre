@@ -117,6 +117,24 @@ namespace SportCentre.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+
+
+
+
+                    var roles = await getUserRole(Input.Email, Input.Password);
+                    if (roles != null)
+                    {
+                        if (roles.Contains("Admin"))
+                        {
+                            //returnUrl = Url.Content("~/Admin/Dashboard");
+                            returnUrl = Url.Content("~/Error");
+                        }
+                        if (roles.Contains("User"))
+                        {
+                            //returnUrl = Url.Content("~/User/Dashboard");
+                            returnUrl = Url.Content("~/Privacy");
+                        }
+                    }
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -140,7 +158,7 @@ namespace SportCentre.Areas.Identity.Pages.Account
         }
 
 
-        public async Task<string> getUserRole(string email, string password)
+        public async Task<List<string>> getUserRole(string email, string password)
         {
             List<string> roles = new();
 
@@ -151,6 +169,8 @@ namespace SportCentre.Areas.Identity.Pages.Account
             {
                 roles = (List<string>)await _userManager.GetRolesAsync(user);
             }
+
+            return roles;
      ;
             
         }
