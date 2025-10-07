@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SportCentre.Models;
 
 namespace SportCentre.Data
 {
@@ -9,5 +10,9 @@ namespace SportCentre.Data
             : base(options)
         {
         }
+
+
+        public DbSet<Attivita> attivita { get; set; } = default!;
+        public DbSet<Prenotazione> prenotazioni { get; set; } = default!;
     }
 }

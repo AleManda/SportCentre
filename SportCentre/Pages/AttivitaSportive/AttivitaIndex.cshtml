@@ -1,0 +1,52 @@
+﻿@page
+@model SportCentre.Pages.AttivitaSportive.AttivitaIndexModel
+
+@{
+    ViewData["Title"] = "Attività del centro sportivo";
+}
+
+<h1>Attività del centro sportivo</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Attivita[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attivita[0].descrizione)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attivita[0].Orario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attivita[0].Posti)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Attivita) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.descrizione)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Orario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Posti)
+            </td>
+            <td>
+                    <a asp-page="./PrenotaAttivita" asp-route-id="@item.Id" asp-route-descr="@item.descrizione">Prenota</a> |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

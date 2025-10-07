@@ -1,0 +1,23 @@
+﻿@page
+@model SportCentre.Pages.AttivitaSportive.PrenotaAttivitaModel
+@{
+}
+
+
+<h2>Prenota @Model.AttivitaSportiva.descrizione</h2>
+
+<h8>L'orario per questa attività è @Model.AttivitaSportiva.Orario:00</h8>
+
+<form method="post">
+    <div class="form-group">
+        <label for="Data">Data:</label>
+        <input type="date" id="Data" name="Data" class="form-control" value="@Model.Data.ToString("yyyy-MM-dd")" />
+    </div>
+    <button type="submit" class="btn btn-primary">Invia</button>
+</form>
+
+@if (Model.Data != DateTime.MinValue)
+{
+    <p>Hai selezionato: <strong>@Model.Data.ToString("dd/MM/yyyy")</strong></p>
+}
+

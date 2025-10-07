@@ -132,7 +132,7 @@ namespace SportCentre.Areas.Identity.Pages.Account
                         if (roles.Contains("User"))
                         {
                             //returnUrl = Url.Content("~/User/Dashboard");
-                            returnUrl = Url.Content("~/Privacy");
+                            returnUrl = Url.Content("~/AttivitaSportive/AttivitaIndex");
                         }
                     }
                     return LocalRedirect(returnUrl);
