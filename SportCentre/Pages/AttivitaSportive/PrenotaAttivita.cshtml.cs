@@ -27,7 +27,13 @@ namespace SportCentre.Pages.AttivitaSportive
 
         public void OnPost()
         {
-            int count = _context.prenotazioni.Count(p => p.Data == DateOnly.FromDateTime(Data) && p.attivitaId == AttivitaSportiva.Id);
+            int count = _context.prenotazioni.Count(p => p.Data == DateOnly.FromDateTime(Data) 
+                                                     && p.attivitaId == AttivitaSportiva.Id);
+
+            if (count >= AttivitaSportiva.Posti)
+            {
+                ModelState.AddModelError(string.Empty, "Non ci sono più posti disponibili per questa data.");
+            }
         }
     }
 }
