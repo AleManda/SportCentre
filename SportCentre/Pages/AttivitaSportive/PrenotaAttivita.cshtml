@@ -12,6 +12,7 @@
     <div class="form-group">
         <label for="Data">Data:</label>
         <input type="date" id="Data" name="Data" class="form-control" value="@Model.Data.ToString("yyyy-MM-dd")" />
+        <input type="hidden" asp-for="AttivitaId" />
     </div>
     <button type="submit" class="btn btn-primary">Invia</button>
 </form>
@@ -21,3 +22,9 @@
     <p>Hai selezionato: <strong>@Model.Data.ToString("dd/MM/yyyy")</strong></p>
 }
 
+@if (!string.IsNullOrEmpty(Model.MessaggioConferma))
+{
+    <div class="alert alert-success">
+        @Model.MessaggioConferma
+    </div>
+}

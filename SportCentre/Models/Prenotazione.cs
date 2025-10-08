@@ -10,11 +10,10 @@ namespace SportCentre.Models
 
         public DateOnly Data { get; set; }
 
-        public string UserId { get; set; }
 
-        public IdentityUser Utente { get; set; }
 
-        public int AttivitaId { get; set; }
+
+        public IdentityUser User { get; set; }
 
         public Attivita Attivita { get; set; }
 
