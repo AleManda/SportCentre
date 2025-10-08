@@ -5,6 +5,23 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to our sport centre</h1>
 </div>
+<hr />
+@if(!string.IsNullOrEmpty(Model.role))
+{
+    <h5 class="text-left">You are logged in as @Model.role</h5>
+    @if (Model.role == "admin")
+    {
+        <div class="text-left">
+            <a asp-page="AttivitaSportive/PrenotazioniIndex">Prenotazioni/</a>
+        </div>
+    }
+    @if (Model.role == "user")
+    {
+        <div class="text-left">
+            <a asp-page="AttivitaSportive/AttivitaIndex">Attivita</a>
+        </div>
+    }
+
+}

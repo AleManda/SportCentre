@@ -2,18 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SportCentre.Areas.Identity.Pages.Account
 {
@@ -109,6 +111,8 @@ namespace SportCentre.Areas.Identity.Pages.Account
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
+            checkEmail();
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -118,16 +122,13 @@ namespace SportCentre.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in.");
 
-
-
-
-                    var roles = await getUserRole(Input.Email, Input.Password);
+                    var roles = await getUserRoleAsync(Input.Email);
                     if (roles != null)
                     {
                         if (roles.Contains("Admin"))
                         {
                             //returnUrl = Url.Content("~/Admin/Dashboard");
-                            returnUrl = Url.Content("~/Error");
+                            returnUrl = Url.Content("~/AttivitaSportive/PrenotazioniIndex");
                         }
                         if (roles.Contains("User"))
                         {
@@ -158,7 +159,7 @@ namespace SportCentre.Areas.Identity.Pages.Account
         }
 
 
-        public async Task<List<string>> getUserRole(string email, string password)
+        public async Task<List<string>> getUserRoleAsync(string email)
         {
             List<string> roles = new();
 
@@ -173,6 +174,14 @@ namespace SportCentre.Areas.Identity.Pages.Account
             return roles;
      ;
             
+        }
+
+        public void checkEmail()
+        {
+            if (!Regex.IsMatch(Input.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                ModelState.AddModelError("Email", "Formato email non valido.");
+            }
         }
     }
 }

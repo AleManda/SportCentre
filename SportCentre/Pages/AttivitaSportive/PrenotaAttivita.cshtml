@@ -11,7 +11,7 @@
 <form method="post">
     <div class="form-group">
         <label for="Data">Data:</label>
-        <input type="date" id="Data" name="Data" class="form-control" value="@Model.Data.ToString("yyyy-MM-dd")" />
+        <input asp-for="Data" class="form-control" />
         <input type="hidden" asp-for="AttivitaId" />
     </div>
     <button type="submit" class="btn btn-primary">Invia</button>
@@ -28,3 +28,5 @@
         @Model.MessaggioConferma
     </div>
 }
+
+<div asp-validation-summary="All" class="text-danger"></div>

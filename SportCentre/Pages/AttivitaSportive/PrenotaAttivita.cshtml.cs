@@ -27,7 +27,7 @@ namespace SportCentre.Pages.AttivitaSportive
             _userManager = userManager;
         }
 
-        public void OnGet(int id,string descr)
+        public void OnGet(int id)
         {
             Data = DateTime.Today.AddDays(1);
             AttivitaId = id;
@@ -44,34 +44,23 @@ namespace SportCentre.Pages.AttivitaSportive
                 return Page();
             }
 
-            int count = _context.prenotazioni.Count(p => p.Data == DateOnly.FromDateTime(Data)
-                                                    && p.attivitaId == AttivitaSportiva.Id);
-            if (count >= AttivitaSportiva.Posti)
-            {
-                ModelState.AddModelError(string.Empty, "Non ci sono più posti disponibili per questa data.");
-                return Page();
-            }
-
-            AttivitaSportiva = _context.attivita.FirstOrDefault(a => a.Id == AttivitaSportiva.Id);
-            if (AttivitaSportiva == null)
-            {
-                return NotFound();
-            }
-            if (Data < DateTime.Today)
-            {
-                ModelState.AddModelError(string.Empty, "La data selezionata non è valida.");
-                return Page();
-            }
-            //CheckAvailability();
-            //if (!ModelState.IsValid)
-            //{
-            //    return Page();
-            //}
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 return Challenge();
             }
+
+            if (Data < DateTime.Today)
+            {
+                ModelState.AddModelError(string.Empty, "La data selezionata non è valida.");
+                return Page();
+            }
+            CheckAvailability(user.Id);
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
             var prenotazione = new Prenotazione
             {
                 userId = user.Id,
@@ -80,9 +69,28 @@ namespace SportCentre.Pages.AttivitaSportive
             };
             _context.prenotazioni.Add(prenotazione);
             await _context.SaveChangesAsync();
-            MessaggioConferma = $"Prenotazione effettuata con successo! {AttivitaSportiva.descrizione} in data {Data}";
+            MessaggioConferma = $"Prenotazione effettuata con successo! {AttivitaSportiva.descrizione} in data {DateOnly.FromDateTime(Data)}";
 
             return Page();
+        }
+
+        private void CheckAvailability(string userid)
+        {
+            int count = _context.prenotazioni.Count(p => p.Data == DateOnly.FromDateTime(Data)
+                                                    && p.attivitaId == AttivitaSportiva.Id);
+            if (count >= AttivitaSportiva.Posti)
+            {
+                ModelState.AddModelError(string.Empty, "Non ci sono più posti disponibili per questa data.");
+            }
+
+            bool alreadyBooked = _context.prenotazioni.Any(p => p.Data == DateOnly.FromDateTime(Data)
+                                                    && p.attivitaId == AttivitaSportiva.Id
+                                                    && p.userId == userid);
+
+            if (alreadyBooked)
+            {
+                ModelState.AddModelError(string.Empty, "Hai già una prenotazione per questa data.");
+            }
         }
     }
 }
