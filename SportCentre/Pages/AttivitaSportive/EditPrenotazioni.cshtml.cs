@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,10 +15,12 @@ namespace SportCentre.Pages.AttivitaSportive
     public class EditPrenotazioniModel : PageModel
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public EditPrenotazioniModel(SportCentre.Data.ApplicationDbContext context)
+        public EditPrenotazioniModel(SportCentre.Data.ApplicationDbContext context,UserManager<IdentityUser> usermanager)
         {
             _context = context;
+            _userManager = usermanager;
         }
 
         public Prenotazione Prenotazione { get; set; } = default!;
@@ -31,6 +34,9 @@ namespace SportCentre.Pages.AttivitaSportive
             {
                 return NotFound();
             }
+
+            var allUsers = _userManager.Users.ToList();
+            var usersWithRole = new List<IdentityUser>();
 
             var prenotazione = await _context.prenotazioni
                 .Include(p => p.Attivita)
@@ -49,9 +55,17 @@ namespace SportCentre.Pages.AttivitaSportive
                 Data = prenotazione.Data
             };
 
+            foreach (var user in allUsers)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Contains("User"))
+                {
+                    usersWithRole.Add(user);
+                }
+            }
 
             ViewData["attivitaId"] = new SelectList(_context.attivita, "Id", "Name");
-            ViewData["userId"] = new SelectList(_context.Users, "Id", "UserName");
+            ViewData["userId"] = new SelectList(usersWithRole, "Id", "UserName");
 
             return Page();
         }
@@ -74,7 +88,10 @@ namespace SportCentre.Pages.AttivitaSportive
             }
 
             CheckAvailability(PrenotazioneVM.attivitaId, PrenotazioneVM.userId, PrenotazioneVM.Data);
-
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
             prenotazione.userId = PrenotazioneVM.userId;
             prenotazione.attivitaId = PrenotazioneVM.attivitaId;
