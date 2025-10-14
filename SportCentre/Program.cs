@@ -64,6 +64,13 @@ else
     app.UseHsts();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var _roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    await RoleSeeder.SeedRolesAsync(_roleManager);
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
