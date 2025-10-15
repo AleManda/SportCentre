@@ -7,9 +7,7 @@
 
 <h1>Prenotazioni del centro sportivo</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -21,6 +19,40 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Prenotazioni[0].Attivita)
+            </th>
+            <th></th>
+        </tr>
+
+        <tr>
+            <th>
+                <form asp-page="./Index" method="get">
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="date" name="searchdate" asp-for="@Model.CurrentFilterDate" />
+                            <input type="submit" value="Search" class="btn-primary" /> |
+                        </p>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form asp-page="./Index" method="get">
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchuser" asp-for="@Model.CurrentFilterUser" />
+                            <input type="submit" value="Search" class="btn-primary" /> |
+                        </p>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form asp-page="./Index" method="get">
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchattivita" asp-for="@Model.CurrentFilterAttivita" />
+                            <input type="submit" value="Search" class="btn-primary" /> |
+                        </p>
+                    </div>
+                </form>
             </th>
             <th></th>
         </tr>
