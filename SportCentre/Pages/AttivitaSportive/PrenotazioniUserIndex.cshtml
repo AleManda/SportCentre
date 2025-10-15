@@ -7,9 +7,6 @@
 
 <h1>Prenotazioni</h1>
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -32,10 +29,10 @@
                 @Html.DisplayFor(modelItem => item.Data)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
+                @Html.DisplayFor(modelItem => item.User.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Attivita.Id)
+                @Html.DisplayFor(modelItem => item.Attivita.Name)
             </td>
 @*             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
@@ -46,6 +43,23 @@
 }
     </tbody>
 </table>
+
+@{
+    var prevDisabled = !Model.Prenotazioni.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Prenotazioni.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./PrenotazioniUserIndex"
+   asp-route-pageIndex="@(Model.Prenotazioni.PageIndex - 1)"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./PrenotazioniUserIndex"
+   asp-route-pageIndex="@(Model.Prenotazioni.PageIndex + 1)"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>
+<hr />
 
 <p>
     <a asp-page="AttivitaIndex">Attività</a>

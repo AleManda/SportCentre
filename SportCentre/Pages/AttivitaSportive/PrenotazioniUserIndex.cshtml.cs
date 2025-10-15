@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SportCentre.Data;
 using SportCentre.Models;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SportCentre.Pages.AttivitaSportive
 {
@@ -15,16 +16,22 @@ namespace SportCentre.Pages.AttivitaSportive
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IConfiguration Configuration;
 
-        public PrenotazioniUserIndexModel(SportCentre.Data.ApplicationDbContext context,UserManager<IdentityUser> usermanager)
+        public PrenotazioniUserIndexModel(SportCentre.Data.ApplicationDbContext context,UserManager<IdentityUser> usermanager, IConfiguration configuration)
         {
             _context = context;
             _userManager = usermanager;
+            Configuration = configuration;
         }
 
-        public IList<Prenotazione> Prenotazioni { get;set; } = default!;
+        //public IList<Prenotazione> Prenotazioni { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public PaginatedList<Prenotazione>? Prenotazioni { get; set; }
+
+
+        //___________________________________________________________________________________________
+        public async Task OnGetAsync(int? pageIndex)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -32,9 +39,18 @@ namespace SportCentre.Pages.AttivitaSportive
                 return;
             }
 
-            Prenotazioni = await _context.prenotazioni
-                .Include(p => p.Attivita)
-                .Include(p => p.User).Where(p => p.User.Id == user.Id).ToListAsync();
+            IQueryable<Prenotazione> prenotazioniIQ = _context.prenotazioni
+                                    .Include(p => p.Attivita)
+                                    .Include(p => p.User);
+
+            var pageSize = Configuration.GetValue("PageSize", 4);
+
+            Prenotazioni = await PaginatedList<Prenotazione>.CreateAsync(
+                prenotazioniIQ.Where(p => p.User.Id == user.Id).AsNoTracking(), pageIndex ?? 1, pageSize);
+
+            //Prenotazioni = await _context.prenotazioni
+            //    .Include(p => p.Attivita)
+            //    .Include(p => p.User).Where(p => p.User.Id == user.Id).ToListAsync();
         }
     }
 }

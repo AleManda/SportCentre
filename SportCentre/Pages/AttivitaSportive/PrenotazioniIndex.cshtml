@@ -7,13 +7,15 @@
 
 <h1>Prenotazioni del centro sportivo</h1>
 
-
+<form asp-page="./AttivitaSportive/DeletePrenotazione" method="get">
 <table class="table">
     <thead>
         <tr>
+
             <th>
                 @Html.DisplayNameFor(model => model.Prenotazioni[0].Data)
             </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.Prenotazioni[0].User)
             </th>
@@ -25,35 +27,39 @@
 
         <tr>
             <th>
-                <form asp-page="./Index" method="get">
+
                     <div class="form-actions no-color">
                         <p>
-                            <input type="date" name="searchdate" asp-for="@Model.CurrentFilterDate" />
-                            <input type="submit" value="Search" class="btn-primary" /> |
+                            <input type="date" name="searchdate" asp-for="CurrentFilterDate" />
                         </p>
                     </div>
-                </form>
+
             </th>
             <th>
-                <form asp-page="./Index" method="get">
+
                     <div class="form-actions no-color">
                         <p>
-                            <input type="text" name="searchuser" asp-for="@Model.CurrentFilterUser" />
-                            <input type="submit" value="Search" class="btn-primary" /> |
+                            <input type="text" name="searchuser" asp-for="CurrentFilterUser" />
                         </p>
                     </div>
-                </form>
+
             </th>
             <th>
-                <form asp-page="./Index" method="get">
+
                     <div class="form-actions no-color">
                         <p>
-                            <input type="text" name="searchattivita" asp-for="@Model.CurrentFilterAttivita" />
-                            <input type="submit" value="Search" class="btn-primary" /> |
+                            <input type="text" name="searchattivita" asp-for="CurrentFilterAttivita" />
+
                         </p>
                     </div>
-                </form>
+
             </th>
+                <th>
+                    <div class="form-actions no-color">
+                        <p><input type="submit" value="Search" class="btn-primary" /> 
+                        </p>
+                    </div>
+                </th>
             <th></th>
         </tr>
     </thead>
@@ -70,11 +76,28 @@
                 @Html.DisplayFor(modelItem => item.Attivita.Name)
             </td>
             <td>
-                    <a asp-page="./EditPrenotazioni" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-page="./DeletePrenotazione" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./EditPrenotazioni" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./DeletePrenotazione" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+</form>
+
+
+@{
+    var prevDisabled = !Model.Prenotazioni.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Prenotazioni.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./PrenotazioniIndex"
+   asp-route-pageIndex="@(Model.Prenotazioni.PageIndex - 1)"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./PrenotazioniIndex"
+   asp-route-pageIndex="@(Model.Prenotazioni.PageIndex + 1)"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>

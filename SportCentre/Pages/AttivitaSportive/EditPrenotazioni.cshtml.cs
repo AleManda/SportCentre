@@ -90,6 +90,7 @@ namespace SportCentre.Pages.AttivitaSportive
             CheckAvailability(PrenotazioneVM.attivitaId, PrenotazioneVM.userId, PrenotazioneVM.Data);
             if (!ModelState.IsValid)
             {
+                //return RedirectToPage("./EditPrenotazioni", new { PrenotazioneVM.Id });
                 return Page();
             }
 

@@ -1,33 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SportCentre.Data;
 using SportCentre.Models;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SportCentre.Pages.AttivitaSportive
 {
     public class PrenotazioniIndexModel : PageModel
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;
+        private readonly IConfiguration Configuration;
 
-        [BindProperty]
-        public string CurrentFilterDate { get; set; }
-        public string CurrentFilterAttivita { get; set; }
-        public string CurrentFilterUser { get; set; }
+        public string? CurrentFilterDate { get; set; }
+        public string? CurrentFilterAttivita { get; set; }
+        public string? CurrentFilterUser { get; set; }
 
-        public PrenotazioniIndexModel(SportCentre.Data.ApplicationDbContext context)
+        public PrenotazioniIndexModel(SportCentre.Data.ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
+            Configuration = configuration;
         }
 
-        public IList<Prenotazione> Prenotazioni { get;set; } = default!;
+        //public IList<Prenotazione> Prenotazioni { get;set; } = default!;
 
-        public async Task OnGetAsync(string searchdate,string searchuser,string searchattivita)
+        public PaginatedList<Prenotazione>? Prenotazioni { get; set; }
+
+
+        //___________________________________________________________________________________________
+        public async Task OnGetAsync(string searchdate,string searchuser,string searchattivita, int? pageIndex)
         {
+            CurrentFilterDate = searchdate;
+            CurrentFilterUser = searchuser;
+            CurrentFilterAttivita = searchattivita;
+
             IQueryable<Prenotazione> prenotazioniIQ = _context.prenotazioni
                 .Include(p => p.Attivita)
                 .Include(p => p.User);
@@ -45,7 +56,12 @@ namespace SportCentre.Pages.AttivitaSportive
                 prenotazioniIQ = prenotazioniIQ.Where(p => p.Attivita.Name.Contains(searchattivita));
             }
 
-            Prenotazioni = await prenotazioniIQ.ToListAsync();
+            var pageSize = Configuration.GetValue("PageSize", 4);
+
+            Prenotazioni = await PaginatedList<Prenotazione>.CreateAsync(
+                prenotazioniIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
+
+            //Prenotazioni = await prenotazioniIQ.ToListAsync();
             //Prenotazioni = await _context.prenotazioni
             //    .Include(p => p.Attivita)
             //    .Include(p => p.User).ToListAsync();

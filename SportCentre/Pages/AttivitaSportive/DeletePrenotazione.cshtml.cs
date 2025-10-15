@@ -13,6 +13,7 @@ namespace SportCentre.Pages.AttivitaSportive
     public class DeletePrenotazioneModel : PageModel
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;
+        public string deletemsg = "";
 
         public DeletePrenotazioneModel(SportCentre.Data.ApplicationDbContext context)
         {
@@ -55,8 +56,9 @@ namespace SportCentre.Pages.AttivitaSportive
                 _context.prenotazioni.Remove(Prenotazione);
                 await _context.SaveChangesAsync();
             }
-
-            return RedirectToPage("./Index");
+            deletemsg = "Prenotazione eliminata con successo.";
+            return Page();
+            //return RedirectToPage("./PrenotazioniIndex");
         }
     }
 }
