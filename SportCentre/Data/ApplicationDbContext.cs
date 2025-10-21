@@ -14,5 +14,6 @@ namespace SportCentre.Data
 
         public DbSet<Attivita> attivita { get; set; } = default!;
         public DbSet<Prenotazione> prenotazioni { get; set; } = default!;
+        public DbSet<Centre> SportCentres { get; set; } = default!;
     }
 }
