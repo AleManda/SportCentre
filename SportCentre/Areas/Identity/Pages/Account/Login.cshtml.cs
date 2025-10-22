@@ -128,7 +128,7 @@ namespace SportCentre.Areas.Identity.Pages.Account
                         if (roles.Contains("Admin"))
                         {
                             //returnUrl = Url.Content("~/Admin/Dashboard");
-                            returnUrl = Url.Content("~/AttivitaSportive/PrenotazioniIndex");
+                            returnUrl = Url.Content("~/SportCentres/SportCentresIndex");
                         }
                         if (roles.Contains("User"))
                         {

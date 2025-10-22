@@ -3,7 +3,7 @@ using SportCentre.Models;
 
 namespace SportCentre.Models
 {
-    public class Centre
+    public class SportCentre
     {
    
         public int id { get; set; }
@@ -14,6 +14,6 @@ namespace SportCentre.Models
    
         public string Location { get; set; } = string.Empty;
 
-        //public ICollection<Attivita>? AttivitaSportive { get; set; }
+        public ICollection<Attivita>? AttivitaSportive { get; set; } = new List<Attivita>();
     }
 }

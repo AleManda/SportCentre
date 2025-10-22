@@ -1,0 +1,46 @@
+﻿@page
+@model SportCentre.Pages.SportCentres.SportCentresIndexModel
+
+<p>
+    <a asp-page="./CreateSportCentre">Create New Sport Centre</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.sportCentres[0].Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.sportCentres[0].Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.sportCentres[0].Location)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.sportCentres)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+                <td>
+                    <a asp-page="/AttivitaSportive/PrenotazioniIndex" asp-route-id="@item.id">Prenotazioni</a>
+                </td>
+            <td>
+                 <a asp-page="./EditSportCentre" asp-route-id="@item.id">Edit</a> |
+                    @*    <a asp-page="./Details" asp-route-id="@item.id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.id">Delete</a> *@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

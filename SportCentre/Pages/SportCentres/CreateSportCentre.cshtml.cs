@@ -25,7 +25,7 @@ namespace SportCentre.Pages.SportCentres
         }
 
         [BindProperty]
-        public Centre scentre { get; set; } = default!;
+        public SportCentre.Models.SportCentre scentre { get; set; } = default!;
 
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
@@ -38,7 +38,7 @@ namespace SportCentre.Pages.SportCentres
             _context.SportCentres.Add(scentre);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./SPortCentresIndex");
         }
     }
 }

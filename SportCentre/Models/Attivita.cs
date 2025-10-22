@@ -9,7 +9,11 @@
 
         public int Posti{  get; set; }
 
-        public List<Prenotazione>? Prenotazioni { get; set; }
+        public ICollection<Prenotazione>? Prenotazioni { get; set; } = new List<Prenotazione>();
+
+        public ICollection<SportCentre>? Centres { get; set; } = new List<SportCentre>();
+
+
 
 
 

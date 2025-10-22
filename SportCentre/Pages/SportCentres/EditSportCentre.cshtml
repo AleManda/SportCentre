@@ -1,0 +1,46 @@
+﻿@page
+@model SportCentre.Pages.SportCentres.EditSportCentreModel
+
+<h4>Centre</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Centre.id" />
+            <div class="form-group">
+                
+                <label asp-for="Centre.Name" class="control-label"></label>
+                <input asp-for="Centre.Name" class="form-control" />
+                <span asp-validation-for="Centre.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <label asp-for="Centre.Address" class="control-label"></label>
+                <input asp-for="Centre.Address" class="form-control" />
+                <span asp-validation-for="Centre.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <label asp-for="Centre.Location" class="control-label"></label>
+                <input asp-for="Centre.Location" class="form-control" />
+                <span asp-validation-for="Centre.Location" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+
+                <label asp-for="Attivita.Id" class="control-label"></label>
+                <select asp-for="Attivita.Id" class="form-control" asp-items="ViewBag.attivitaId"></select>
+                <span asp-validation-for="Attivita.Id" class="text-danger"></span>
+            </div>
+            <div><p></p></div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./SportCentresIndex">Back to List</a>
+</div>
+
