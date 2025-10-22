@@ -8,7 +8,7 @@ using SportCentre.Data;
 
 #nullable disable
 
-namespace SportCentre.Data.Migrations
+namespace SportCentre.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
