@@ -1,4 +1,4 @@
-﻿namespace SportCentre.Models
+﻿namespace SportCentre.Models.ViewModels
 {
     public class PrenotazioneViewModel
     {

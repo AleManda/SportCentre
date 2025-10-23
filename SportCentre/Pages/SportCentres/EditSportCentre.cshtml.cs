@@ -53,26 +53,26 @@ namespace SportCentre.Pages.SportCentres
                 return Page();
             }
 
-            var attivita = await _context.attivita.FirstOrDefaultAsync(a => a.Id == Attivita.Id);   
-            Centre.AttivitaSportive.Add(attivita!);
+            //var attivita = await _context.attivita.FirstOrDefaultAsync(a => a.Id == Attivita.Id);   
+            //Centre.AttivitaSportive.Add(attivita!);
 
-            _context.Attach(Centre).State = EntityState.Modified;
+            //_context.Attach(Centre).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CentreExists(Centre.id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            //try
+            //{
+            //    await _context.SaveChangesAsync();
+            //}
+            //catch (DbUpdateConcurrencyException)
+            //{
+            //    if (!CentreExists(Centre.id))
+            //    {
+            //        return NotFound();
+            //    }
+            //    else
+            //    {
+            //        throw;
+            //    }
+            //}
 
             return Page();
             //return RedirectToPage("./SPortCentresIndex");

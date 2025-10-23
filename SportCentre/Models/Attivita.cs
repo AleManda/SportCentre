@@ -11,7 +11,7 @@
 
         public ICollection<Prenotazione>? Prenotazioni { get; set; } = new List<Prenotazione>();
 
-        public ICollection<SportCentre>? Centres { get; set; } = new List<SportCentre>();
+        public ICollection<SportCentreAttivita>? sportCentreAttivita { get; set; } = new List<SportCentreAttivita>();
 
 
 

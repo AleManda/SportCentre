@@ -14,6 +14,6 @@ namespace SportCentre.Models
    
         public string Location { get; set; } = string.Empty;
 
-        public ICollection<Attivita>? AttivitaSportive { get; set; } = new List<Attivita>();
+        public ICollection<SportCentreAttivita>? sportCentreAttivita { get; set; } = new List<SportCentreAttivita>();
     }
 }

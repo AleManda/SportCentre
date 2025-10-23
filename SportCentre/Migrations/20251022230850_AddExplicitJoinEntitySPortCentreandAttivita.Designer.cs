@@ -12,8 +12,8 @@ using SportCentre.Data;
 namespace SportCentre.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251022004355_AddManyToManyBetweenSportCentreandAttivita")]
-    partial class AddManyToManyBetweenSportCentreandAttivita
+    [Migration("20251022230850_AddExplicitJoinEntitySPortCentreandAttivita")]
+    partial class AddExplicitJoinEntitySPortCentreandAttivita
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,21 +24,6 @@ namespace SportCentre.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("AttivitaSportCentre", b =>
-                {
-                    b.Property<int>("AttivitaSportiveId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Centresid")
-                        .HasColumnType("int");
-
-                    b.HasKey("AttivitaSportiveId", "Centresid");
-
-                    b.HasIndex("Centresid");
-
-                    b.ToTable("AttivitaSportCentre");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -318,19 +303,22 @@ namespace SportCentre.Migrations
                     b.ToTable("SportCentres");
                 });
 
-            modelBuilder.Entity("AttivitaSportCentre", b =>
+            modelBuilder.Entity("SportCentre.Models.SportCentreAttivita", b =>
                 {
-                    b.HasOne("SportCentre.Models.Attivita", null)
-                        .WithMany()
-                        .HasForeignKey("AttivitaSportiveId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("SportCentreId")
+                        .HasColumnType("int");
 
-                    b.HasOne("SportCentre.Models.SportCentre", null)
-                        .WithMany()
-                        .HasForeignKey("Centresid")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("AttivitaId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("SportCentreId", "AttivitaId");
+
+                    b.HasIndex("AttivitaId");
+
+                    b.ToTable("SportCentreAttivita");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -401,9 +389,35 @@ namespace SportCentre.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SportCentre.Models.SportCentreAttivita", b =>
+                {
+                    b.HasOne("SportCentre.Models.Attivita", "Attivita")
+                        .WithMany("sportCentreAttivita")
+                        .HasForeignKey("AttivitaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SportCentre.Models.SportCentre", "SportCentre")
+                        .WithMany("sportCentreAttivita")
+                        .HasForeignKey("SportCentreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Attivita");
+
+                    b.Navigation("SportCentre");
+                });
+
             modelBuilder.Entity("SportCentre.Models.Attivita", b =>
                 {
                     b.Navigation("Prenotazioni");
+
+                    b.Navigation("sportCentreAttivita");
+                });
+
+            modelBuilder.Entity("SportCentre.Models.SportCentre", b =>
+                {
+                    b.Navigation("sportCentreAttivita");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportCentre.Data;
 using SportCentre.Models;
+using SportCentre.Models.ViewModels;
 
 namespace SportCentre.Pages.AttivitaSportive
 {
