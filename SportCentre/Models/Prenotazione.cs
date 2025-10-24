@@ -8,6 +8,8 @@ namespace SportCentre.Models
         public string? userId { get; set; }
         public int attivitaId { get; set; }
 
+        public int sportCentreId { get; set; }
+
         public DateOnly Data { get; set; }
 
 
@@ -16,6 +18,8 @@ namespace SportCentre.Models
         public IdentityUser User { get; set; }
 
         public Attivita Attivita { get; set; }
+
+        public SportCentre sportCentre { get; set; }
 
 
 

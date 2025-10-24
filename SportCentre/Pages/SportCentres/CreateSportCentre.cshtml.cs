@@ -22,20 +22,20 @@ namespace SportCentre.Pages.SportCentres
         public CreateSportCentreModel(SportCentre.Data.ApplicationDbContext context)
         {
             _context = context;
+            Input = new SportCentreCreateViewModel();
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            Input = new SportCentreCreateViewModel
-            {
-                AvailableAttivita = await _context.attivita.ToListAsync()
-
-            };
+            Input.AvailableAttivita = await _context.attivita.ToListAsync();
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (!ModelState.IsValid)
+                return Page();
+
             var centro = new SportCentre.Models.SportCentre
             {
                 Name = Input.Name,
@@ -46,6 +46,8 @@ namespace SportCentre.Pages.SportCentres
             _context.SportCentres.Add(centro);
             await _context.SaveChangesAsync();
 
+
+            // Handle many-to-many relationship
             foreach (var attivitaId in Input.SelectedAttivitaIds)
             {
                 _context.SportCentreAttivita.Add(new SportCentreAttivita
@@ -57,7 +59,7 @@ namespace SportCentre.Pages.SportCentres
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToPage("Index");
+            return RedirectToPage("SportCentresIndex");
         }
     }
 }

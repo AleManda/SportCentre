@@ -1,0 +1,20 @@
+﻿Admin
+
+prenotazioni deve filtrare per centro
+
+PrenotazioniIndex:
+perchè ho un form con get?per i filtri o paginazione?
+ha asp-page="./AttivitaSportive/DeletePrenotazione" x prova,quando servirebbe questo asp-page?
+
+finire questa pagina che deve filtrare x centro
+
+----------------------------------------------------------------------------------------
+
+User
+
+
+Deve partire con lista centri ma si può fare una doppia tabella o simile con centro-->sue attività
+e tasto x prenotare a fianco come ora.
+Tabella Prenotazione deve puntare a Centri,aggiungere FK.
+La prenotazione deve essere x centro.
+PrenotazioniUserIndex deve comprendere il centro

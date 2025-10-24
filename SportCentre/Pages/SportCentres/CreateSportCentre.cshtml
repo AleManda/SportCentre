@@ -1,47 +1,61 @@
 ﻿@page
 @model CreateSportCentreModel
 
+@using Models;
+
 <h4>SportCentre</h4>
 <hr />
 <div class="row">
+
     <div class="col-md-4">
         <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <span class="text-danger">*</span>
-                <label asp-for="Input.Name" class="control-label"></label>
-                <input asp-for="Input.Name" class="form-control" />
-                <span asp-validation-for="Input.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <span class="text-danger">*</span>
-                <label asp-for="Input.Address" class="control-label"></label>
-                <input asp-for="Input.Address" class="form-control" />
-                <span asp-validation-for="Input.Address" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <span class="text-danger">*</span>
-                <label asp-for="Input.Location" class="control-label"></label>
-                <input asp-for="Input.Location" class="form-control" />
-                <span asp-validation-for="Input.Location" class="text-danger"></span>
-            </div>
 
-            <label>Attività disponibili:</label>
-            @foreach (var attivita in Model.Input.AvailableAttivita)
-            {
-                <div>
-                    <input type="checkbox" name="SelectedAttivitaIds" value="@attivita.Id" />
-                    @attivita.Name
-                </div>
-            }
+            <table class="table">
+                <tr>
+                    <td>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <span class="text-danger">*</span>
+                            <label asp-for="Input.Name" class="control-label"></label>
+                            <input asp-for="Input.Name" class="form-control" />
+                            <span asp-validation-for="Input.Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <span class="text-danger">*</span>
+                            <label asp-for="Input.Address" class="control-label"></label>
+                            <input asp-for="Input.Address" class="form-control" />
+                            <span asp-validation-for="Input.Address" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <span class="text-danger">*</span>
+                            <label asp-for="Input.Location" class="control-label"></label>
+                            <input asp-for="Input.Location" class="form-control" />
+                            <span asp-validation-for="Input.Location" class="text-danger"></span>
+                        </div>
+                     </td>
+                    <td><div><p></p></div></td>
+                     <td>
+                        <label>Attività disponibili:</label>
+                        @foreach (var attivita in Model.Input.AvailableAttivita ?? new List<Attivita>())
+                        {
+                            <div>
+                                <input type="checkbox" name="Input.SelectedAttivitaIds" value="@attivita.Id" />
+                                @attivita.Name
+                            </div>
+                        }
+                    </td>
+                </tr>
+            </table>
 
-            <button type="submit">Crea</button> 
             <div> <p></p>    </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+
         </form>
     </div>
+
+
 </div>
 
 <div>

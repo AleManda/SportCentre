@@ -33,10 +33,10 @@
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
                 <td>
-                    <a asp-page="/AttivitaSportive/PrenotazioniIndex" asp-route-id="@item.id">Prenotazioni</a>
+                    <a asp-page="/AttivitaSportive/PrenotazioniIndex" asp-route-sportcentreid="@item.id">Prenotazioni</a>
                 </td>
             <td>
-                 <a asp-page="./EditSportCentre" asp-route-id="@item.id">Edit</a> |
+                    <a asp-page="./EditSportCentre" asp-route-id="@item.id">Edit</a> |
                     @*    <a asp-page="./Details" asp-route-id="@item.id">Details</a> |
                 <a asp-page="./Delete" asp-route-id="@item.id">Delete</a> *@
             </td>

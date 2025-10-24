@@ -21,6 +21,9 @@ namespace SportCentre.Pages.AttivitaSportive
         public string? CurrentFilterAttivita { get; set; }
         public string? CurrentFilterUser { get; set; }
 
+        //[BindProperty]
+        public int sportCentreId { get; set; }
+
         public PrenotazioniIndexModel(SportCentre.Data.ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
@@ -33,16 +36,23 @@ namespace SportCentre.Pages.AttivitaSportive
 
 
         //___________________________________________________________________________________________
-        public async Task OnGetAsync(string searchdate,string searchuser,string searchattivita, int? pageIndex)
+        public async Task OnGetAsync(string searchdate,string searchuser,string searchattivita, int? pageIndex,int sportcentreid)
         {
+
+            //ho già asp-for="CurrentFilterDate"(ma non bindproperty in model,qui) in pagina,questo serve?
+            //il form fa get,non post,x questo non c'è binding?gli input del form vengono passati in routing
+            //e non postati,quindi no binding?
             CurrentFilterDate = searchdate;
             CurrentFilterUser = searchuser;
             CurrentFilterAttivita = searchattivita;
+            sportCentreId = sportcentreid; 
 
             IQueryable<Prenotazione> prenotazioniIQ = _context.prenotazioni
                 .Include(p => p.Attivita)
-                .Include(p => p.User);
-
+                .Include(p => p.User)
+                .Include(p => p.sportCentre)
+                .Where(p => p.sportCentreId == sportcentreid);
+            
             if(!string.IsNullOrEmpty(searchdate) && DateOnly.TryParse(searchdate, out var parsedDate))
             {
                 prenotazioniIQ = prenotazioniIQ.Where(p => p.Data == parsedDate);
