@@ -33,13 +33,22 @@ namespace SportCentre.Pages.SportCentres
                 return NotFound();
             }
 
-            var centre =  await _context.SportCentres.FirstOrDefaultAsync(m => m.id == id);
+            var centre =  await _context.SportCentres
+                .Include(sp => sp.sportCentreAttivita)
+                .ThenInclude(sca => sca.Attivita).FirstOrDefaultAsync(sp => sp.id == id);
+
             if (centre == null)
             {
                 return NotFound();
             }
             Centre = centre;
-            ViewData["attivitaId"] = new SelectList(_context.attivita, "Id", "Name");
+
+
+            List<int> existingAttivitaIds = Centre.sportCentreAttivita!
+                .Select(sca => sca.AttivitaId)
+                .ToList();
+
+            //ViewData["attivitaId"] = new SelectList(_context.attivita, "Id", "Name");
 
             return Page();
         }
