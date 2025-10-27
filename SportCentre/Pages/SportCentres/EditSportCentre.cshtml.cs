@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportCentre.Data;
 using SportCentre.Models;
+using SportCentre.Models.ViewModels;
 
 namespace SportCentre.Pages.SportCentres
 {
@@ -21,10 +22,8 @@ namespace SportCentre.Pages.SportCentres
         }
 
         [BindProperty]
-        public SportCentre.Models.SportCentre Centre { get; set; } = default!;
+        public SportCentreEditViewModel viewModel { get; set; } = new SportCentreEditViewModel();
 
-        [BindProperty]
-        public Attivita Attivita { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -41,12 +40,13 @@ namespace SportCentre.Pages.SportCentres
             {
                 return NotFound();
             }
-            Centre = centre;
 
-
-            List<int> existingAttivitaIds = Centre.sportCentreAttivita!
-                .Select(sca => sca.AttivitaId)
-                .ToList();
+            viewModel.id = centre.id;
+            viewModel.Name = centre.Name;
+            viewModel.Address = centre.Address;
+            viewModel.Location = centre.Location;
+            viewModel.AvailableAttivita = await _context.attivita.ToListAsync();
+            viewModel.existingAttivitaIds = centre.sportCentreAttivita!.Select(sca => sca.AttivitaId).ToList();
 
             //ViewData["attivitaId"] = new SelectList(_context.attivita, "Id", "Name");
 
@@ -62,26 +62,46 @@ namespace SportCentre.Pages.SportCentres
                 return Page();
             }
 
-            //var attivita = await _context.attivita.FirstOrDefaultAsync(a => a.Id == Attivita.Id);   
-            //Centre.AttivitaSportive.Add(attivita!);
+            viewModel.AvailableAttivita = await _context.attivita.ToListAsync();
+            var centre = await _context.SportCentres
+                            .Include(sp => sp.sportCentreAttivita)
+                            .ThenInclude(sca => sca.Attivita).FirstOrDefaultAsync(sp => sp.id == viewModel.id);
 
-            //_context.Attach(Centre).State = EntityState.Modified;
+            if (centre == null)
+            {
+                return NotFound();
+            }
 
-            //try
-            //{
-            //    await _context.SaveChangesAsync();
-            //}
-            //catch (DbUpdateConcurrencyException)
-            //{
-            //    if (!CentreExists(Centre.id))
-            //    {
-            //        return NotFound();
-            //    }
-            //    else
-            //    {
-            //        throw;
-            //    }
-            //}
+            centre.Name = viewModel.Name;
+            centre.Address = viewModel.Address;
+            centre.Location = viewModel.Location;
+            centre.sportCentreAttivita = new List<SportCentreAttivita>();
+            foreach (var attivitaId in viewModel.existingAttivitaIds)
+            {
+                centre.sportCentreAttivita.Add(new SportCentreAttivita
+                {
+                    SportCentreId = centre.id,
+                    AttivitaId = attivitaId,
+                    CreatedAt = DateTime.UtcNow
+                });
+            }
+            _context.Attach(centre).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CentreExists(centre.id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return Page();
             //return RedirectToPage("./SPortCentresIndex");
