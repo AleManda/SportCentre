@@ -5,46 +5,188 @@
     ViewData["Title"] = "Attività del centro sportivo";
 }
 
-<h1>Attività del centro sportivo</h1>
+<h1>Attività dei centri sportivi</h1>
+
+@* @foreach (var sportcentre in Model.sportCentres)
+{
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.sportCentres[0].Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.sportCentres[0].Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.sportCentres[0].Location)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => sportcentre.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => sportcentre.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => sportcentre.Location)
+                    </td>
+                    <td>
+                        <a asp-page="/AttivitaSportive/PrenotazioniIndex" asp-route-sportcentreid="@sportcentre.id">Prenotazioni</a>
+                    </td>
+                    <td>
+                        <a asp-page="./EditSportCentre" asp-route-id="@sportcentre.id">Edit</a> |
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                </td>
+            </tr>
+
+        </tbody>
+    </table> *@
+
+@*     <table class="table">
+        <thead>
+            <tr>
+                <td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Attivita[0].Name)
+                </th>
+
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Attivita[0].descrizione)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Attivita[0].Orario)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Attivita[0].Posti)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+            <tbody>
+            @foreach (var sportcentreattivta in sportcentre.sportCentreAttivita)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.descrizione)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Orario)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Posti)
+                    </td>
+                    <td>
+                        <a asp-page="./PrenotaAttivita" asp-route-id="@sportcentreattivta.Attivita.Id">Prenota</a> |
+                    </td>
+                </tr>
+               
+            }
+    </tbody>
+    </table> 
+
+
+
+}*@
+
 
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Attivita[0].Name)
+@*             <th>
+                @* @Html.DisplayNameFor(model => model.sportCentres[0].Name) 
+                Sport Centre
+            </th> *@
+@*             <th>
+                @Html.DisplayNameFor(model => model.sportCentres[0].Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Attivita[0].descrizione)
+                @Html.DisplayNameFor(model => model.sportCentres[0].Location)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Attivita[0].Orario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Attivita[0].Posti)
-            </th>
-            <th></th>
+            <th></th> *@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Attivita) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.descrizione)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Orario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Posti)
-            </td>
-            <td>
-                    <a asp-page="./PrenotaAttivita" asp-route-id="@item.Id">Prenota</a> |
-            </td>
-        </tr>
-}
+        @foreach (var sportcentre in Model.sportCentres)
+        {
+            <tr>
+                <td style="background-color:lightgreen">
+                    @Html.DisplayFor(modelItem => sportcentre.Name)     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location)
+                </td>
+@*                 <td>
+                    @Html.DisplayFor(modelItem => sportcentre.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => sportcentre.Location)
+                </td> *@
+            </tr>
+
+            <tr>
+                <td>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @* @Html.DisplayNameFor(model => model.Attivita[0].Name) *@
+                                    Attività
+                                </th>                          
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Attivita[0].descrizione)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Attivita[0].Orario)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Attivita[0].Posti)
+                                </th>
+                                <th></th>
+                                
+                            </tr>
+                        </thead>
+                         <tbody>
+                                @foreach (var sportcentreattivta in sportcentre.sportCentreAttivita)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Name)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.descrizione)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Orario)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Posti)
+                                        </td>
+                                        <td>
+                                            <a asp-page="./PrenotaAttivita" asp-route-id="@sportcentreattivta.Attivita.Id">Prenota</a> |
+                                        </td>
+                                    </tr>
+               
+                                }
+                        </tbody> 
+                    </table>
+
+
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 

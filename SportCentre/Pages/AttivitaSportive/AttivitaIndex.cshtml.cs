@@ -20,10 +20,16 @@ namespace SportCentre.Pages.AttivitaSportive
         }
 
         public IList<Attivita> Attivita { get;set; } = default!;
+        public IList<SportCentre.Models.SportCentre?> sportCentres { get; set; }
 
         public async Task OnGetAsync()
         {
             Attivita = await _context.attivita.ToListAsync();
+
+            sportCentres = await _context.SportCentres.Include(sc => sc.sportCentreAttivita)
+                .ThenInclude(sa => sa.Attivita)
+                .ToListAsync();
+
         }
     }
 }
