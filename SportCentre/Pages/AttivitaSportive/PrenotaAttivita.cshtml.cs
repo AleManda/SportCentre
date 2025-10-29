@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using SportCentre.Models;
 using System.Linq;
 
@@ -10,6 +11,11 @@ namespace SportCentre.Pages.AttivitaSportive
     {
         [BindProperty]
         public int AttivitaId { get; set; }
+
+        [BindProperty]
+        public int SportCentreId { get; set; }
+
+        public string SportCentreName { get; set; } = string.Empty;
 
         [BindProperty]
         public DateTime Data { get; set; } = DateTime.MinValue;
@@ -27,11 +33,14 @@ namespace SportCentre.Pages.AttivitaSportive
             _userManager = userManager;
         }
 
-        public void OnGet(int id)
+        public async Task<IActionResult> OnGetAsync(int attivitaid,int sportcentreid)
         {
             Data = DateTime.Today.AddDays(1);
-            AttivitaId = id;
-            AttivitaSportiva = _context.attivita.FirstOrDefault(a => a.Id == id);
+            AttivitaId = attivitaid;
+            SportCentreId = sportcentreid;
+            SportCentreName = (await _context.SportCentres.FindAsync(sportcentreid))?.Name ?? "Centro Sportivo";
+            AttivitaSportiva = await _context.attivita.FirstOrDefaultAsync(a => a.Id == attivitaid);
+            return Page();                            
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -65,11 +74,12 @@ namespace SportCentre.Pages.AttivitaSportive
             {
                 userId = user.Id,
                 attivitaId = AttivitaSportiva.Id,
+                sportCentreId = SportCentreId,
                 Data = DateOnly.FromDateTime(Data)
             };
             _context.prenotazioni.Add(prenotazione);
             await _context.SaveChangesAsync();
-            MessaggioConferma = $"Prenotazione effettuata con successo! {AttivitaSportiva.descrizione} in data {DateOnly.FromDateTime(Data)}";
+            MessaggioConferma = $"Prenotazione effettuata con successo! {AttivitaSportiva.descrizione} presso {SportCentreName} in data {DateOnly.FromDateTime(Data)}";
 
             return Page();
         }

@@ -15,3 +15,9 @@ User
 
 - La prenotazione deve essere x centro.
 - PrenotazioniUserIndex deve comprendere il centro
+
+
+
+
+- @Html.Label("name", sportcentre.Name, new { @style = "color:Red;font-weight:bold" })     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location)
+  qui vedere 'label' e il resto,come funzionano questi tag helper

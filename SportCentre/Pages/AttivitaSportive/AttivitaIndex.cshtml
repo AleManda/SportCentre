@@ -6,6 +6,7 @@
 }
 
 <h1>Attività dei centri sportivi</h1>
+<hr />
 
 @* @foreach (var sportcentre in Model.sportCentres)
 {
@@ -125,14 +126,11 @@
         {
             <tr>
                 <td style="background-color:lightgreen">
-                    @Html.DisplayFor(modelItem => sportcentre.Name)     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location)
+                   <span style="font:bold">
+@*                        @Html.DisplayFor(modelItem => sportcentre.Name)     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location) *@
+                        @Html.Label("name", sportcentre.Name, new { @style = "color:Red;font-weight:bold" })     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location)
+                   </span>
                 </td>
-@*                 <td>
-                    @Html.DisplayFor(modelItem => sportcentre.Address)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => sportcentre.Location)
-                </td> *@
             </tr>
 
             <tr>
@@ -175,7 +173,7 @@
                                             @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Posti)
                                         </td>
                                         <td>
-                                            <a asp-page="./PrenotaAttivita" asp-route-id="@sportcentreattivta.Attivita.Id">Prenota</a> |
+                                        <a asp-page="./PrenotaAttivita" asp-route-attivitaid="@sportcentreattivta.AttivitaId" asp-route-sportcentreid="@sportcentreattivta.SportCentreId">Prenota</a> |
                                         </td>
                                     </tr>
                
@@ -186,7 +184,7 @@
 
                 </td>
             </tr>
-        }
+        }    @*  foreach (var sportcentre in Model.sportCentres) *@
     </tbody>
 </table>
 

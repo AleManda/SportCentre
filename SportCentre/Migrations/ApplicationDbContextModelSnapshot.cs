@@ -263,12 +263,17 @@ namespace SportCentre.Migrations
                     b.Property<int>("attivitaId")
                         .HasColumnType("int");
 
+                    b.Property<int>("sportCentreId")
+                        .HasColumnType("int");
+
                     b.Property<string>("userId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("attivitaId");
+
+                    b.HasIndex("sportCentreId");
 
                     b.HasIndex("userId");
 
@@ -377,6 +382,12 @@ namespace SportCentre.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SportCentre.Models.SportCentre", "sportCentre")
+                        .WithMany("prenotazioni")
+                        .HasForeignKey("sportCentreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithMany()
                         .HasForeignKey("userId");
@@ -384,6 +395,8 @@ namespace SportCentre.Migrations
                     b.Navigation("Attivita");
 
                     b.Navigation("User");
+
+                    b.Navigation("sportCentre");
                 });
 
             modelBuilder.Entity("SportCentre.Models.SportCentreAttivita", b =>
@@ -414,6 +427,8 @@ namespace SportCentre.Migrations
 
             modelBuilder.Entity("SportCentre.Models.SportCentre", b =>
                 {
+                    b.Navigation("prenotazioni");
+
                     b.Navigation("sportCentreAttivita");
                 });
 #pragma warning restore 612, 618
