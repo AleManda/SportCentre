@@ -8,20 +8,23 @@
     <h1 class="display-4">Welcome to our sport centre</h1>
 </div>
 <hr />
+
 @if(!string.IsNullOrEmpty(Model.role))
 {
     <h5 class="text-left">You are logged in as @Model.role</h5>
+
     @if (Model.role == "admin")
     {
         <div class="text-left">
             <a asp-page="SportCentres/SportCentresIndex">Elenco dei Centri Sportivi</a>
-@*             <a asp-page="AttivitaSportive/PrenotazioniIndex">Prenotazioni</a> *@
         </div>
     }
+
     @if (Model.role == "user")
     {
         <div class="text-left">
             <a asp-page="AttivitaSportive/AttivitaIndex">Attivita</a>
+            <br />
             <a asp-page="AttivitaSportive/PrenotazioniUserIndex">Prenotazioni</a>
         </div>
     }

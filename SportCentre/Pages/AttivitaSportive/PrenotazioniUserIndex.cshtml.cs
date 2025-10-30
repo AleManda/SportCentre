@@ -18,17 +18,14 @@ namespace SportCentre.Pages.AttivitaSportive
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IConfiguration Configuration;
 
+        public PaginatedList<Prenotazione>? Prenotazioni { get; set; }
+
         public PrenotazioniUserIndexModel(SportCentre.Data.ApplicationDbContext context,UserManager<IdentityUser> usermanager, IConfiguration configuration)
         {
             _context = context;
             _userManager = usermanager;
             Configuration = configuration;
         }
-
-        //public IList<Prenotazione> Prenotazioni { get;set; } = default!;
-
-        public PaginatedList<Prenotazione>? Prenotazioni { get; set; }
-
 
         //___________________________________________________________________________________________
         public async Task OnGetAsync(int? pageIndex)
@@ -47,10 +44,6 @@ namespace SportCentre.Pages.AttivitaSportive
 
             Prenotazioni = await PaginatedList<Prenotazione>.CreateAsync(
                 prenotazioniIQ.Where(p => p.User.Id == user.Id).AsNoTracking(), pageIndex ?? 1, pageSize);
-
-            //Prenotazioni = await _context.prenotazioni
-            //    .Include(p => p.Attivita)
-            //    .Include(p => p.User).Where(p => p.User.Id == user.Id).ToListAsync();
         }
     }
 }
