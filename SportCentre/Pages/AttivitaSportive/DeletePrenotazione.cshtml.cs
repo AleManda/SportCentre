@@ -30,7 +30,10 @@ namespace SportCentre.Pages.AttivitaSportive
                 return NotFound();
             }
 
-            var prenotazione = await _context.prenotazioni.Include(p => p.User).Include(p => p.Attivita).FirstOrDefaultAsync(m => m.Id == id);
+            var prenotazione = await _context.prenotazioni.Include(p => p.User)
+                                                          .Include(p => p.Attivita)
+                                                          .Include(p => p.sportCentre)
+                                                          .FirstOrDefaultAsync(m => m.Id == id);
 
             if (prenotazione is not null)
             {

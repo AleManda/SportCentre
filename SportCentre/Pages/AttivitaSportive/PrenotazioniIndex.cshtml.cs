@@ -24,13 +24,14 @@ namespace SportCentre.Pages.AttivitaSportive
         //[BindProperty]
         public int sportCentreId { get; set; }
 
+        public string sportCentrName { get; set; }
+
         public PrenotazioniIndexModel(SportCentre.Data.ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             Configuration = configuration;
         }
 
-        //public IList<Prenotazione> Prenotazioni { get;set; } = default!;
 
         public PaginatedList<Prenotazione>? Prenotazioni { get; set; }
 
@@ -45,7 +46,11 @@ namespace SportCentre.Pages.AttivitaSportive
             CurrentFilterDate = searchdate;
             CurrentFilterUser = searchuser;
             CurrentFilterAttivita = searchattivita;
-            sportCentreId = sportcentreid; 
+            sportCentreId = sportcentreid;
+            sportCentrName = _context.SportCentres
+                .Where(s => s.id == sportcentreid)
+                .Select(s => s.Name)
+                .FirstOrDefault() ?? "Sport Centre";
 
             IQueryable<Prenotazione> prenotazioniIQ = _context.prenotazioni
                 .Include(p => p.Attivita)
@@ -66,15 +71,10 @@ namespace SportCentre.Pages.AttivitaSportive
                 prenotazioniIQ = prenotazioniIQ.Where(p => p.Attivita.Name.Contains(searchattivita));
             }
 
-            var pageSize = Configuration.GetValue("PageSize", 4);
+            var pageSize = Configuration.GetValue("PageSize", 11);
 
             Prenotazioni = await PaginatedList<Prenotazione>.CreateAsync(
                 prenotazioniIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
-
-            //Prenotazioni = await prenotazioniIQ.ToListAsync();
-            //Prenotazioni = await _context.prenotazioni
-            //    .Include(p => p.Attivita)
-            //    .Include(p => p.User).ToListAsync();
         }
     }
 }

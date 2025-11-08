@@ -5,9 +5,14 @@
 
         public int Id { get; set; }
         public string? userId { get; set; }
+        public string? userName { get; set; }
 
         public int attivitaId { get; set; }
 
         public DateOnly Data { get; set; }
+
+        public string sportCentreName { get; set; } = string.Empty; 
+
+        public int sportCentreId { get; set; }
     }
 }

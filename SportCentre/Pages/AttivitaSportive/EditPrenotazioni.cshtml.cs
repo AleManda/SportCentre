@@ -41,7 +41,8 @@ namespace SportCentre.Pages.AttivitaSportive
 
             var prenotazione = await _context.prenotazioni
                 .Include(p => p.Attivita)
-                .Include(p => p.User).FirstOrDefaultAsync(m => m.Id == id);
+                .Include(p => p.User)
+                .Include(p => p.sportCentre).FirstOrDefaultAsync(p => p.Id == id);
 
             if (prenotazione == null)
             {
@@ -53,7 +54,9 @@ namespace SportCentre.Pages.AttivitaSportive
                 Id = prenotazione.Id,
                 userId = prenotazione.userId,
                 attivitaId = prenotazione.attivitaId,
-                Data = prenotazione.Data
+                Data = prenotazione.Data,
+                sportCentreName = prenotazione.sportCentre.Name,
+                sportCentreId = prenotazione.sportCentreId
             };
 
             foreach (var user in allUsers)
@@ -100,6 +103,7 @@ namespace SportCentre.Pages.AttivitaSportive
             prenotazione.Data = PrenotazioneVM.Data;
             prenotazione.User = await _context.Users.FindAsync(PrenotazioneVM.userId);
             prenotazione.Attivita = await _context.attivita.FindAsync(PrenotazioneVM.attivitaId);
+            prenotazione.sportCentreId = PrenotazioneVM.sportCentreId;
             Prenotazione = prenotazione;
 
 
@@ -121,7 +125,7 @@ namespace SportCentre.Pages.AttivitaSportive
                 }
             }
 
-            return RedirectToPage("./PrenotazioniIndex");
+            return RedirectToPage("./PrenotazioniIndex",new  { sportcentreid = PrenotazioneVM.sportCentreId });
         }
 
         private bool PrenotazioneExists(int id)

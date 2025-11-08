@@ -5,7 +5,8 @@
     ViewData["Title"] = "Prenotazioni";
 }
 
-<h1>Prenotazioni del centro sportivo</h1>
+<h1>@Model.sportCentrName - Prenotazioni</h1>
+
 
 <form asp-page="./AttivitaSportive/DeletePrenotazione" method="get">
 <table class="table">
@@ -116,3 +117,7 @@
    class="btn btn-primary @nextDisabled">
     Next
 </a>
+<hr />
+<div>
+    <a asp-page="/SportCentres/SportCentresIndex">Back to List</a>
+</div>
