@@ -2,6 +2,8 @@
 @model SportCentre.Pages.SportCentres.SportCentresIndexModel
 <h2>Sport Centres</h2>
 <hr />
+
+<form asp-page="./SportCentresIndex" method="get">
 <table class="table">
     <thead>
         <tr>
@@ -13,6 +15,44 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.sportCentres[0].Location)
+            </th>
+            <th></th>
+        </tr>
+        <tr>
+            <th>
+
+                <div class="form-actions no-color">
+                    <p>
+                        <input type="text" name="searchname" asp-for="CurrentFilterName" />
+                    </p>
+                </div>
+
+            </th>
+            <th>
+
+                <div class="form-actions no-color">
+                    <p>
+                        <input type="text" name="searchaddress" asp-for="CurrentFilterAddress" />
+                    </p>
+                </div>
+
+            </th>
+            <th>
+
+                <div class="form-actions no-color">
+                    <p>
+                        <input type="text" name="searchlocation" asp-for="CurrentFilterLocation" />
+
+                    </p>
+                </div>
+
+            </th>
+            <th>
+                <div class="form-actions no-color">
+                    <p>
+                        <input type="submit" value="Search" class="btn-primary" />
+                    </p>
+                </div>
             </th>
             <th></th>
         </tr>
@@ -42,7 +82,30 @@
 }
     </tbody>
 </table>
-
+</form>
 <p>
     <a asp-page="./CreateSportCentre">Create New Sport Centre</a>
 </p>
+
+
+
+
+@{
+    var prevDisabled = !Model.sportCentres.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.sportCentres.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./SportCentresIndex"
+   asp-route-pageIndex="@(Model.sportCentres.PageIndex - 1)"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+
+<a asp-page="./SportCentresIndex"
+   asp-route-pageIndex="@(Model.sportCentres.PageIndex + 1)" 
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>
+
+<hr />
+
