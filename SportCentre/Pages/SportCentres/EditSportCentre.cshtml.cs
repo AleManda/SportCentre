@@ -24,6 +24,8 @@ namespace SportCentre.Pages.SportCentres
         [BindProperty]
         public SportCentreEditViewModel viewModel { get; set; } = new SportCentreEditViewModel();
 
+        public string? MessaggioConferma { get; set; }
+
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -90,6 +92,7 @@ namespace SportCentre.Pages.SportCentres
             try
             {
                 await _context.SaveChangesAsync();
+                MessaggioConferma = "Dati del centro sportivo aggiornati con successo.";
             }
             catch (DbUpdateConcurrencyException)
             {

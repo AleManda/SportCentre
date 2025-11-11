@@ -43,7 +43,14 @@
         </form>
     </div>
 </div>
-<hr
+<p> </p>
+@if (!string.IsNullOrEmpty(Model.MessaggioConferma))
+{
+    <div class="alert alert-success">
+        @Model.MessaggioConferma
+    </div>
+}
+<hr />
 <div>
     <a asp-page="./PrenotazioniIndex" asp-route-sportcentreid="@Model.PrenotazioneVM.sportCentreId">Back to List</a>
 </div>

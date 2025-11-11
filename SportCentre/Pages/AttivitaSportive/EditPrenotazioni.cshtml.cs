@@ -18,6 +18,8 @@ namespace SportCentre.Pages.AttivitaSportive
         private readonly SportCentre.Data.ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
+        public string? MessaggioConferma { get; set; }
+
         public EditPrenotazioniModel(SportCentre.Data.ApplicationDbContext context,UserManager<IdentityUser> usermanager)
         {
             _context = context;
@@ -112,6 +114,7 @@ namespace SportCentre.Pages.AttivitaSportive
             try
             {
                 await _context.SaveChangesAsync();
+                MessaggioConferma = "Prenotazione aggiornata con successo.";
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -125,7 +128,8 @@ namespace SportCentre.Pages.AttivitaSportive
                 }
             }
 
-            return RedirectToPage("./PrenotazioniIndex",new  { sportcentreid = PrenotazioneVM.sportCentreId });
+            return Page();
+            //return RedirectToPage("./PrenotazioniIndex",new  { sportcentreid = PrenotazioneVM.sportCentreId });
         }
 
         private bool PrenotazioneExists(int id)

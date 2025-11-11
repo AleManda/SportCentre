@@ -63,6 +63,13 @@
         </form>
     </div>
 </div>
+<p> </p>
+@if (!string.IsNullOrEmpty(Model.MessaggioConferma))
+{
+    <div class="alert alert-success">
+        @Model.MessaggioConferma
+    </div>
+}
 <hr />
 <div>
     <a asp-page="./SportCentresIndex">Back to List</a>
