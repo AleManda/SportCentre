@@ -79,7 +79,7 @@ namespace SportCentre.Pages.AttivitaSportive
             };
             _context.prenotazioni.Add(prenotazione);
             await _context.SaveChangesAsync();
-            MessaggioConferma = $"Prenotazione effettuata con successo! {AttivitaSportiva.descrizione} presso {SportCentreName} in data {DateOnly.FromDateTime(Data)}";
+            MessaggioConferma = $"Prenotazione effettuata con successo! {AttivitaSportiva.Descrizione} presso {SportCentreName} in data {DateOnly.FromDateTime(Data)}";
 
             return Page();
         }

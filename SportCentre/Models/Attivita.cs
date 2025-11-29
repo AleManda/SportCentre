@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public string? descrizione { get; set; }
+        public string? Descrizione { get; set; }
         public int Orario { get; set; }
 
         public int Posti{  get; set; }

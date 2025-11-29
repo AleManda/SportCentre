@@ -96,12 +96,20 @@
 }
 
 <a asp-page="./SportCentresIndex"
+   asp-route-searchname="@(Model.CurrentFilterName)"
+   asp-route-searchlocation="@(Model.CurrentFilterLocation)"
+   asp-route-searchaddress="@(Model.CurrentFilterAddress)"
+
    asp-route-pageIndex="@(Model.sportCentres.PageIndex - 1)"
    class="btn btn-primary @prevDisabled">
     Previous
 </a>
 
 <a asp-page="./SportCentresIndex"
+   asp-route-searchname="@(Model.CurrentFilterName)"
+   asp-route-searchlocation="@(Model.CurrentFilterLocation)"
+   asp-route-searchaddress="@(Model.CurrentFilterAddress)"
+
    asp-route-pageIndex="@(Model.sportCentres.PageIndex + 1)" 
    class="btn btn-primary @nextDisabled">
     Next

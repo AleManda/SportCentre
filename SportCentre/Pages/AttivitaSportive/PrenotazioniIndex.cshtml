@@ -8,7 +8,7 @@
 <h1>@Model.sportCentrName - Prenotazioni</h1>
 
 
-<form asp-page="./AttivitaSportive/DeletePrenotazione" method="get">
+<form asp-page="" method="get">
 <table class="table">
     <thead>
         <tr>
@@ -104,12 +104,20 @@
 }
 
 <a asp-page="./PrenotazioniIndex"
+   asp-route-searchdate="@(Model.CurrentFilterDate)"
+   asp-route-searchuser="@(Model.CurrentFilterUser)"
+   asp-route-searchattivita="@(Model.CurrentFilterAttivita)"
+
    asp-route-pageIndex="@(Model.Prenotazioni.PageIndex - 1)"
    asp-route-sportcentreid="@Model.sportCentreId"
    class="btn btn-primary @prevDisabled">
     Previous
 </a>
 <a asp-page="./PrenotazioniIndex"
+   asp-route-searchdate="@(Model.CurrentFilterDate)"
+   asp-route-searchuser="@(Model.CurrentFilterUser)"
+   asp-route-searchattivita="@(Model.CurrentFilterAttivita)"
+
    asp-route-pageIndex="@(Model.Prenotazioni.PageIndex + 1)" 
    asp-route-sportcentreid="@Model.sportCentreId"
    class="btn btn-primary @nextDisabled">

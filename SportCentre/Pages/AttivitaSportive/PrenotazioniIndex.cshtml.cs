@@ -26,15 +26,13 @@ namespace SportCentre.Pages.AttivitaSportive
 
         public string sportCentrName { get; set; }
 
+        public PaginatedList<Prenotazione>? Prenotazioni { get; set; }
+
         public PrenotazioniIndexModel(SportCentre.Data.ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             Configuration = configuration;
         }
-
-
-        public PaginatedList<Prenotazione>? Prenotazioni { get; set; }
-
 
         //___________________________________________________________________________________________
         public async Task OnGetAsync(string searchdate,string searchuser,string searchattivita, int? pageIndex,int sportcentreid)
@@ -47,6 +45,7 @@ namespace SportCentre.Pages.AttivitaSportive
             CurrentFilterUser = searchuser;
             CurrentFilterAttivita = searchattivita;
             sportCentreId = sportcentreid;
+
             sportCentrName = _context.SportCentres
                 .Where(s => s.id == sportcentreid)
                 .Select(s => s.Name)

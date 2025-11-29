@@ -7,6 +7,100 @@
 
 <h1>Attività dei centri sportivi</h1>
 <hr />
+<form asp-page="" method="get">
+
+
+    <table class="table">
+        <thead>
+            <tr>
+            </tr>
+        </thead>
+         <tbody>
+            <tr>
+                <th>
+                    Sport Centre
+                    @*  @Html.DisplayNameFor(model => Model.sportcentres[0].Name) *@
+                </th>
+            </tr>
+            <tr>
+                <th>
+
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchsportcentre" asp-for="CurrentFilterSportCentre" />
+                        </p>
+                    </div>
+
+                </th>
+            </tr>
+             <tr>
+@*                 <th>
+                    Sport Centre
+                     @Html.DisplayNameFor(model => Model.sportcentres[0].Name) 
+                </th> *@
+                <th>
+                    @Html.DisplayNameFor(model => Model.sportcentres[0].sportCentreAttivita[0].Attivita)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.sportcentres[0].sportCentreAttivita[0].Attivita.Descrizione)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.sportcentres[0].sportCentreAttivita[0].Attivita.Orario)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => Model.sportcentres[0].sportCentreAttivita[0].Attivita.Posti)
+                </th>
+                <th></th>
+             </tr>
+            <tr>
+
+                <th>
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchattivita" asp-for="CurrentFilterAttività" />
+
+                        </p>
+                    </div>
+
+                </th>
+                <th>
+
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchdescrizione" asp-for="CurrentFilterDescrizione" />
+                        </p>
+                    </div>
+
+                </th>
+                <th>
+
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchorario" asp-for="CurrentFilterOrario" />
+
+                        </p>
+                    </div>
+                </th>
+                <th>
+
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchposti" asp-for="CurrentFilterPosti" />
+
+                        </p>
+                    </div>
+                </th>
+                <th>
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="submit" value="Search" class="btn-primary" />
+                        </p>
+                    </div>
+                </th>
+                <th></th>
+            </tr>
+          </tbody>
+         </table>
 
 
 
@@ -16,13 +110,15 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var sportcentre in Model.sportCentres)
+
+
+        @foreach (var sportcentre in Model.sportcentres)
         {
             <tr>
-                <td style="background-color:lightgreen">
+                <td style="background-color:lightcyan">
                    <span style="font:bold">
 @*                        @Html.DisplayFor(modelItem => sportcentre.Name)     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location) *@
-                        @Html.Label("name", sportcentre.Name, new { @style = "color:Red;font-weight:bold" })     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location)
+                            @Html.Label("name", sportcentre.Name, new { @style = "color:Red;font-weight:bold" })     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location) />
                    </span>
                 </td>
             </tr>
@@ -34,21 +130,30 @@
                         <thead>
                             <tr>
                                 <th>
-                                    @* @Html.DisplayNameFor(model => model.Attivita[0].Name) *@
-                                    Attività
+                                    @Html.DisplayNameFor(model => Model.sportcentres[0].sportCentreAttivita[0].Attivita)
                                 </th>                          
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Attivita[0].descrizione)
+                                    @Html.DisplayNameFor(model => Model.sportcentres[0].sportCentreAttivita[0].Attivita.Descrizione)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Attivita[0].Orario)
+                                    @Html.DisplayNameFor(model => Model.sportcentres[0].sportCentreAttivita[0].Attivita.Orario)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Attivita[0].Posti)
+                                    @Html.DisplayNameFor(model => Model.sportcentres[0].sportCentreAttivita[0].Attivita.Posti)
                                 </th>
                                 <th></th>
                                 
                             </tr>
+
+
+
+ 
+
+
+
+
+
+
                         </thead>
                          <tbody>
                                 @foreach (var sportcentreattivta in sportcentre.sportCentreAttivita)
@@ -58,7 +163,7 @@
                                             @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Name)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.descrizione)
+                                            @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Descrizione)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => sportcentreattivta.Attivita.Orario)
@@ -76,11 +181,43 @@
                     </table>
 
 
+
                 </td>
             </tr>
         }    @*  foreach (var sportcentre in Model.sportCentres) *@
     </tbody>
 </table>
+</form>
+
+
+@{
+    var prevDisabled = !Model.sportcentres.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.sportcentres.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./AttivitaIndex"
+   asp-route-searchsportcentre="@(Model.CurrentFilterSportCentre)"
+   asp-route-searchattivita="@(Model.CurrentFilterAttività)"
+   asp-route-searchdescrizione="@(Model.CurrentFilterDescrizione)"
+   asp-route-searchorario="@(Model.CurrentFilterOrario)"
+   asp-route-searchposti="@(Model.CurrentFilterPosti)"
+
+   asp-route-pageIndex="@(Model.sportcentres.PageIndex - 1)"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./AttivitaIndex"
+   asp-route-searchsportcentre="@(Model.CurrentFilterSportCentre)"
+   asp-route-searchattivita="@(Model.CurrentFilterAttività)"
+   asp-route-searchdescrizione="@(Model.CurrentFilterDescrizione)"
+   asp-route-searchorario="@(Model.CurrentFilterOrario)"
+   asp-route-searchposti="@(Model.CurrentFilterPosti)"
+
+   asp-route-pageIndex="@(Model.sportcentres.PageIndex + 1)"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>
+<hr />
 
 <p>
     <a asp-page="PrenotazioniUserIndex">Prenotazioni</a>

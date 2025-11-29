@@ -7,6 +7,8 @@
 
 <h1>Prenotazioni</h1>
 
+
+<form asp-page="" method="get">
 <table class="table">
     <thead>
         <tr>
@@ -14,35 +16,85 @@
                 @Html.DisplayNameFor(model => model.Prenotazioni[0].Data)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Prenotazioni[0].User)
+                @Html.DisplayNameFor(model => model.Prenotazioni[0].sportCentre)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Prenotazioni[0].Attivita)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Prenotazioni[0].Attivita.Descrizione)
+            </th>
             <th></th>
         </tr>
+
+            <tr>
+                <th>
+
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="date" name="searchdate" asp-for="CurrentFilterDate" />
+                        </p>
+                    </div>
+
+                </th>
+                <th>
+
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchsportcentre" asp-for="CurrentFilterSportCentre" />
+                        </p>
+                    </div>
+
+                </th>
+                <th>
+
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchattivita" asp-for="CurrentFilterAttivita" />
+
+                        </p>
+                    </div>
+                </th>
+                <th>
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="text" name="searchattivitadescr" asp-for="CurrentFilterAttivitaDescr" />
+
+                        </p>
+                    </div>
+                </th>
+                <th>
+                    <div class="form-actions no-color">
+                        <p>
+                            <input type="submit" value="Search" class="btn-primary" />
+                        </p>
+                    </div>
+                </th>
+                <th></th>
+            </tr>
     </thead>
     <tbody>
 @foreach (var item in Model.Prenotazioni) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Data)
+                   @Html.DisplayFor(modelItem => item.Data)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.Email)
+                    @Html.DisplayFor(modelItem => item.sportCentre.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Attivita.Name)
+                    @Html.DisplayFor(modelItem => item.Attivita.Name)
             </td>
-@*             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td> *@
+            <td>
+                @Html.DisplayFor(modelItem => item.Attivita.Descrizione)
+            </td>
         </tr>
 }
     </tbody>
 </table>
+</form>
+
+
 
 @{
     var prevDisabled = !Model.Prenotazioni.HasPreviousPage ? "disabled" : "";
@@ -50,11 +102,21 @@
 }
 
 <a asp-page="./PrenotazioniUserIndex"
+   asp-route-searchdate="@(Model.CurrentFilterDate)"
+   asp-route-searchsportcentre="@(Model.CurrentFilterSportCentre)"
+   asp-route-searchattivita="@(Model.CurrentFilterAttivita)"
+   asp-route-searchattivitadescr="@(Model.CurrentFilterAttivitaDescr)"
+
    asp-route-pageIndex="@(Model.Prenotazioni.PageIndex - 1)"
    class="btn btn-primary @prevDisabled">
     Previous
 </a>
 <a asp-page="./PrenotazioniUserIndex"
+   asp-route-searchdate="@(Model.CurrentFilterDate)"
+   asp-route-searchsportcentre="@(Model.CurrentFilterSportCentre)"
+   asp-route-searchattivita="@(Model.CurrentFilterAttivita)"
+   asp-route-searchattivitadescr="@(Model.CurrentFilterAttivitaDescr)"
+
    asp-route-pageIndex="@(Model.Prenotazioni.PageIndex + 1)"
    class="btn btn-primary @nextDisabled">
     Next
