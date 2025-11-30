@@ -24,6 +24,9 @@ namespace SportCentre.Pages.SportCentres
         [BindProperty]
         public SportCentreEditViewModel viewModel { get; set; } = new SportCentreEditViewModel();
 
+
+        //
+        //_____________________________________________________________________________________________
         public string? MessaggioConferma { get; set; }
 
 
@@ -55,12 +58,14 @@ namespace SportCentre.Pages.SportCentres
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
+        //
+        //_____________________________________________________________________________________________
         public async Task<IActionResult> OnPostAsync()
         {
+
             if (!ModelState.IsValid)
             {
+                viewModel.AvailableAttivita = await _context.attivita.ToListAsync();
                 return Page();
             }
 
