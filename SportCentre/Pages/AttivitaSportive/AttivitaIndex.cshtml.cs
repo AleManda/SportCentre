@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SportCentre.Data;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SportCentre.Pages.AttivitaSportive
 {
+    [Authorize(Roles = "User,Admin")]
     public class AttivitaIndexModel : PageModel
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;

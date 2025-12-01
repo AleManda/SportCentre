@@ -4,30 +4,37 @@
 }
 
 
-<h2>Prenota @Model.AttivitaSportiva.Descrizione</h2>
+<h2>Prenota @Model.PrenotazioneViewModel.AttivitaSportiva.Descrizione</h2>
 
-<h8>L'orario per questa attività è @Model.AttivitaSportiva.Orario:00</h8>
-
+<h8>L'orario per questa attività è @Model.PrenotazioneViewModel.AttivitaSportiva.Orario:00</h8>
+<p></p>
 <form method="post">
     <div class="form-group">
         <label for="Data">Data:</label>
-        <input asp-for="Data" class="form-control" />
-        <input type="hidden" asp-for="AttivitaId" />
-        <input type="hidden" asp-for="SportCentreId" />
+        <input asp-for="PrenotazioneViewModel.Data" class="form-control" />
+        <input type="hidden" asp-for="PrenotazioneViewModel.attivitaId" />
+        <input type="hidden" asp-for="PrenotazioneViewModel.sportCentreId" />
     </div>
+    <p> </p>
     <button type="submit" class="btn btn-primary">Invia</button>
 </form>
 
-@if (Model.Data != DateTime.MinValue)
+@* @if (Model.PrenotazioneViewModel.Data != DateTime.MinValue)
 {
-    <p>Hai selezionato: <strong>@Model.Data.ToString("dd/MM/yyyy")</strong></p>
-}
+    <p>Hai selezionato: <strong>@Model.PrenotazioneViewModel.Data.ToString("dd/MM/yyyy")</strong></p>
+} *@
 
+<p></p>
 @if (!string.IsNullOrEmpty(Model.MessaggioConferma))
 {
     <div class="alert alert-success">
         @Model.MessaggioConferma
     </div>
 }
-
 <div asp-validation-summary="All" class="text-danger"></div>
+
+<hr />
+<div>
+    <a asp-page="./AttivitaIndex">Back to List</a>
+</div>
+

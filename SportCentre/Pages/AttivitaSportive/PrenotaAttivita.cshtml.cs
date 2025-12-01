@@ -1,31 +1,27 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using SportCentre.Models;
+using SportCentre.Models.ViewModels;
 using System.Linq;
 
 namespace SportCentre.Pages.AttivitaSportive
 {
+    [Authorize(Roles = "User,Admin")]
     public class PrenotaAttivitaModel : PageModel
     {
-        [BindProperty]
-        public int AttivitaId { get; set; }
-
-        [BindProperty]
-        public int SportCentreId { get; set; }
-
-        public string SportCentreName { get; set; } = string.Empty;
-
-        [BindProperty]
-        public DateTime Data { get; set; } = DateTime.MinValue;
-
-        public Attivita? AttivitaSportiva { get; set; }
-
-        public string? MessaggioConferma { get; set; }
 
         private readonly SportCentre.Data.ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+
+        [BindProperty]
+        public PrenotazioneViewModel PrenotazioneViewModel { get; set; } = new PrenotazioneViewModel();
+
+        public string? MessaggioConferma { get; set; }
+
+
 
         public PrenotaAttivitaModel(SportCentre.Data.ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
@@ -33,23 +29,33 @@ namespace SportCentre.Pages.AttivitaSportive
             _userManager = userManager;
         }
 
+        //
+        //___________________________________________________________________________________________
         public async Task<IActionResult> OnGetAsync(int attivitaid,int sportcentreid)
         {
-            Data = DateTime.Today.AddDays(1);
-            AttivitaId = attivitaid;
-            SportCentreId = sportcentreid;
-            SportCentreName = (await _context.SportCentres.FindAsync(sportcentreid))?.Name ?? "Centro Sportivo";
-            AttivitaSportiva = await _context.attivita.FirstOrDefaultAsync(a => a.Id == attivitaid);
+            PrenotazioneViewModel.Data = DateTime.Today.AddDays(1);
+            PrenotazioneViewModel.attivitaId = attivitaid;
+            PrenotazioneViewModel.sportCentreId = sportcentreid;
+            //SportCentreName = (await _context.SportCentres.FindAsync(sportcentreid))?.Name ?? "Centro Sportivo";
+            PrenotazioneViewModel.AttivitaSportiva = await _context.attivita.FirstOrDefaultAsync(a => a.Id == attivitaid);
             return Page();                            
         }
 
+        //
+        //___________________________________________________________________________________________
         public async Task<IActionResult> OnPostAsync()
         {
-            AttivitaSportiva = await _context.attivita.FindAsync(AttivitaId);
+            PrenotazioneViewModel.AttivitaSportiva = await _context.attivita.FindAsync(PrenotazioneViewModel.attivitaId);
 
-            if (AttivitaSportiva == null)
+            if (PrenotazioneViewModel.AttivitaSportiva == null)
             {
                 ModelState.AddModelError(string.Empty, "Attività non trovata.");
+                return Page();
+            }
+
+            if (PrenotazioneViewModel.Data < DateTime.Today)
+            {
+                ModelState.AddModelError(string.Empty, "La data selezionata non è valida.");
                 return Page();
             }
 
@@ -59,12 +65,10 @@ namespace SportCentre.Pages.AttivitaSportive
                 return Challenge();
             }
 
-            if (Data < DateTime.Today)
-            {
-                ModelState.AddModelError(string.Empty, "La data selezionata non è valida.");
-                return Page();
-            }
-            CheckAvailability(user.Id);
+            CheckAvailability(user.Id, PrenotazioneViewModel.AttivitaSportiva);
+
+
+
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -73,27 +77,27 @@ namespace SportCentre.Pages.AttivitaSportive
             var prenotazione = new Prenotazione
             {
                 userId = user.Id,
-                attivitaId = AttivitaSportiva.Id,
-                sportCentreId = SportCentreId,
-                Data = DateOnly.FromDateTime(Data)
+                attivitaId = PrenotazioneViewModel.AttivitaSportiva.Id,
+                sportCentreId = PrenotazioneViewModel.sportCentreId,
+                Data = DateOnly.FromDateTime(PrenotazioneViewModel.Data)
             };
             _context.prenotazioni.Add(prenotazione);
             await _context.SaveChangesAsync();
-            MessaggioConferma = $"Prenotazione effettuata con successo! {AttivitaSportiva.Descrizione} presso {SportCentreName} in data {DateOnly.FromDateTime(Data)}";
+            MessaggioConferma = $"Prenotazione effettuata con successo! {PrenotazioneViewModel.AttivitaSportiva.Descrizione} presso {PrenotazioneViewModel.sportCentreName} in data {DateOnly.FromDateTime(PrenotazioneViewModel.Data)}";
 
             return Page();
         }
 
-        private void CheckAvailability(string userid)
+        private void CheckAvailability(string userid, Attivita AttivitaSportiva)
         {
-            int count = _context.prenotazioni.Count(p => p.Data == DateOnly.FromDateTime(Data)
+            int count = _context.prenotazioni.Count(p => p.Data == DateOnly.FromDateTime(PrenotazioneViewModel.Data)
                                                     && p.attivitaId == AttivitaSportiva.Id);
             if (count >= AttivitaSportiva.Posti)
             {
                 ModelState.AddModelError(string.Empty, "Non ci sono più posti disponibili per questa data.");
             }
 
-            bool alreadyBooked = _context.prenotazioni.Any(p => p.Data == DateOnly.FromDateTime(Data)
+            bool alreadyBooked = _context.prenotazioni.Any(p => p.Data == DateOnly.FromDateTime(PrenotazioneViewModel.Data)
                                                     && p.attivitaId == AttivitaSportiva.Id
                                                     && p.userId == userid);
 

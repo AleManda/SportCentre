@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SportCentre.Data;
 using SportCentre.Models;
 using SportCentre.Models.ViewModels;
@@ -8,10 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace SportCentre.Pages.SportCentres
 {
+    [Authorize(Roles = "Admin")]
     public class CreateSportCentreModel : PageModel
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;

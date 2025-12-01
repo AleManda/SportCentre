@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace SportCentre.Pages.AttivitaSportive
 {
+    [Authorize(Roles = "User,Admin")]
     public class PrenotazioniUserIndexModel : PageModel
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;

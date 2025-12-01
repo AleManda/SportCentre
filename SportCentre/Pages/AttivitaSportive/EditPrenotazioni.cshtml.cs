@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,15 +7,23 @@ using Microsoft.EntityFrameworkCore;
 using SportCentre.Data;
 using SportCentre.Models;
 using SportCentre.Models.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SportCentre.Pages.AttivitaSportive
 {
+    [Authorize(Roles = "Admin")]
     public class EditPrenotazioniModel : PageModel
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
+        [BindProperty]
+        public PrenotazioneViewModel PrenotazioneVM { get; set; } = new PrenotazioneViewModel();
         public string? MessaggioConferma { get; set; }
+
 
         public EditPrenotazioniModel(SportCentre.Data.ApplicationDbContext context,UserManager<IdentityUser> usermanager)
         {
@@ -26,20 +31,14 @@ namespace SportCentre.Pages.AttivitaSportive
             _userManager = usermanager;
         }
 
-        public Prenotazione Prenotazione { get; set; } = default!;
-
-        [BindProperty]
-        public PrenotazioneViewModel PrenotazioneVM { get; set; } = default!;
-
+        //
+        //___________________________________________________________________________________________
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var allUsers = _userManager.Users.ToList();
-            var usersWithRole = new List<IdentityUser>();
 
             var prenotazione = await _context.prenotazioni
                 .Include(p => p.Attivita)
@@ -51,15 +50,82 @@ namespace SportCentre.Pages.AttivitaSportive
                 return NotFound();
             }
 
-            PrenotazioneVM = new PrenotazioneViewModel
+            PrenotazioneVM.Id = prenotazione.Id;
+            PrenotazioneVM.userId = prenotazione.userId;
+            PrenotazioneVM.attivitaId = prenotazione.attivitaId;
+            PrenotazioneVM.Data = prenotazione.Data.ToDateTime(new TimeOnly());
+            PrenotazioneVM.sportCentreName = prenotazione.sportCentre.Name;
+            PrenotazioneVM.sportCentreId = prenotazione.sportCentreId;
+
+            await GetAttIdsUserIds();
+
+            return Page();
+        }
+
+        //
+        //___________________________________________________________________________________________
+        public async Task<IActionResult> OnPostAsync()
+        {
+            //if (!ModelState.IsValid)
+            //{
+            //    await GetAttIdsUserIds();
+            //    return Page();
+            //}
+
+            var prenotazione = await _context.prenotazioni
+                .FirstOrDefaultAsync(m => m.Id == PrenotazioneVM.Id);
+
+            if (prenotazione == null)
             {
-                Id = prenotazione.Id,
-                userId = prenotazione.userId,
-                attivitaId = prenotazione.attivitaId,
-                Data = prenotazione.Data,
-                sportCentreName = prenotazione.sportCentre.Name,
-                sportCentreId = prenotazione.sportCentreId
-            };
+                return NotFound();
+            }
+
+            CheckAvailability(PrenotazioneVM.attivitaId, PrenotazioneVM.userId, DateOnly.FromDateTime(PrenotazioneVM.Data));
+
+            if (!ModelState.IsValid)
+            {
+                await GetAttIdsUserIds();
+                return Page();
+            }
+
+            prenotazione.userId = PrenotazioneVM.userId;
+            prenotazione.attivitaId = PrenotazioneVM.attivitaId;
+            prenotazione.Data = DateOnly.FromDateTime(PrenotazioneVM.Data);
+            prenotazione.User = await _context.Users.FindAsync(PrenotazioneVM.userId);
+            prenotazione.Attivita = await _context.attivita.FindAsync(PrenotazioneVM.attivitaId);
+            prenotazione.sportCentreId = PrenotazioneVM.sportCentreId;
+            //Prenotazione = prenotazione;
+
+            _context.Attach(prenotazione).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+                MessaggioConferma = "Prenotazione aggiornata con successo.";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!PrenotazioneExists(prenotazione.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            await GetAttIdsUserIds();
+
+            return Page();
+            //return RedirectToPage("./PrenotazioniIndex",new  { sportcentreid = PrenotazioneVM.sportCentreId });
+        }
+
+        //
+        //___________________________________________________________________________________________
+        public async Task GetAttIdsUserIds()
+        {
+            var allUsers = _userManager.Users.ToList();
+            var usersWithRole = new List<IdentityUser>();
 
             foreach (var user in allUsers)
             {
@@ -72,71 +138,17 @@ namespace SportCentre.Pages.AttivitaSportive
 
             ViewData["attivitaId"] = new SelectList(_context.attivita, "Id", "Name");
             ViewData["userId"] = new SelectList(usersWithRole, "Id", "UserName");
-
-            return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var prenotazione = await _context.prenotazioni
-                .FirstOrDefaultAsync(m => m.Id == PrenotazioneVM.Id);
-
-            if (prenotazione == null)
-            {
-                return NotFound();
-            }
-
-            CheckAvailability(PrenotazioneVM.attivitaId, PrenotazioneVM.userId, PrenotazioneVM.Data);
-            if (!ModelState.IsValid)
-            {
-                //return RedirectToPage("./EditPrenotazioni", new { PrenotazioneVM.Id });
-                return Page();
-            }
-
-            prenotazione.userId = PrenotazioneVM.userId;
-            prenotazione.attivitaId = PrenotazioneVM.attivitaId;
-            prenotazione.Data = PrenotazioneVM.Data;
-            prenotazione.User = await _context.Users.FindAsync(PrenotazioneVM.userId);
-            prenotazione.Attivita = await _context.attivita.FindAsync(PrenotazioneVM.attivitaId);
-            prenotazione.sportCentreId = PrenotazioneVM.sportCentreId;
-            Prenotazione = prenotazione;
-
-
-            _context.Attach(Prenotazione).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                MessaggioConferma = "Prenotazione aggiornata con successo.";
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PrenotazioneExists(Prenotazione.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return Page();
-            //return RedirectToPage("./PrenotazioniIndex",new  { sportcentreid = PrenotazioneVM.sportCentreId });
-        }
-
+        //
+        //___________________________________________________________________________________________
         private bool PrenotazioneExists(int id)
         {
             return _context.prenotazioni.Any(e => e.Id == id); 
         }
 
+        //
+        //___________________________________________________________________________________________
         private void CheckAvailability(int attivitaid, string userid,DateOnly data)
         {
             var prenotazioniCount = _context.prenotazioni

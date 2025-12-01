@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,27 +6,32 @@ using Microsoft.EntityFrameworkCore;
 using SportCentre.Data;
 using SportCentre.Models;
 using SportCentre.Models.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SportCentre.Pages.SportCentres
 {
+    [Authorize(Roles = "Admin")]
     public class EditSportCentreModel : PageModel
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;
+
+        [BindProperty]
+        public SportCentreEditViewModel viewModel { get; set; } = new SportCentreEditViewModel();
+        public string? MessaggioConferma { get; set; }
 
         public EditSportCentreModel(SportCentre.Data.ApplicationDbContext context)
         {
             _context = context;
         }
 
-        [BindProperty]
-        public SportCentreEditViewModel viewModel { get; set; } = new SportCentreEditViewModel();
+
 
 
         //
         //_____________________________________________________________________________________________
-        public string? MessaggioConferma { get; set; }
-
-
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)

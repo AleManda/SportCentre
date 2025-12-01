@@ -9,10 +9,12 @@
 
         public int attivitaId { get; set; }
 
-        public DateOnly Data { get; set; }
+        public DateTime Data { get; set; }
 
         public string sportCentreName { get; set; } = string.Empty; 
 
         public int sportCentreId { get; set; }
+
+        public Attivita? AttivitaSportiva { get; set; }
     }
 }

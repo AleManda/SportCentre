@@ -24,9 +24,6 @@ namespace SportCentre.Models.ViewModels
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            //if (existingAttivitaIds == null || existingAttivitaIds.Count == 0)
-            //    yield return new ValidationResult("Seleziona almeno un'attività.", new[] { nameof(existingAttivitaIds) });
-
             if (Name?.Length > 50)
                 yield return new ValidationResult("Nome troppo lungo.", new[] { nameof(Name) });
 
