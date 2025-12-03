@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SportCentre.Models.Attivita>
+
+<h4>Attività</h4>
+@if (!Model.Any())
+{
+    <p>Nessuna attività per questo Sport Centre</p>
+}
+else
+{
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Orario</th>
+                <th>Posti</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in Model)
+            {
+                <tr>
+                    <td>@a.Name</td>
+                    <td>@a.Descrizione</td>
+                    <td>@a.Orario</td>
+                    <td>@a.Posti</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
