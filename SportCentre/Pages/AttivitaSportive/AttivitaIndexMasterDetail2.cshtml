@@ -1,5 +1,5 @@
 ﻿@page
-@model SportCentre.Pages.AttivitaSportive.AttivitaIndexMasterDetailModel
+@model SportCentre.Pages.AttivitaSportive.AttivitaIndexMasterDetail2Model
 
 @{
     ViewData["Title"] = "Attività del centro sportivo";
@@ -100,9 +100,13 @@
 
 
 
-    <table class="table">
+    <table id="sportcentresTable" class="table">
         <thead>
             <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -112,24 +116,19 @@
             {
                 <tr>
                     <td style="background-color:lightcyan">
-                        <span style="font:bold">
-                            @*                        @Html.DisplayFor(modelItem => sportcentre.Name)     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location) *@
-                            @Html.Label("name", sportcentre.Name, new { @style = "color:Red;font-weight:bold" })     @Html.DisplayFor(modelItem => sportcentre.Address)     @Html.DisplayFor(modelItem => sportcentre.Location)
-                        </span>
+@*                         <span style="font:bold">
+                            @Html.Label("name", sportcentre.Name, new { @style = "color:Red;font-weight:bold" }) 
+                        </span> *@
+                        @Html.DisplayFor(modelItem => sportcentre.Name)
                     </td>
-                    <td>
-@*                         <button type="button" class="btn btn-info" onclick="loadDetails('@sportcentre.id')">Dettagli</button> *@
-                     <button class="btn btn-info btn-detail" data-scid="@sportcentre.id">Dettagli</button>
-                    </td>
-                </tr>
-                <tr id="details-row-@sportcentre.id" style="display:none;">
-                    <td colspan="3">
-                        <div id="details-container-@sportcentre.id"></div>
-                    </td>
+                    <td style="background-color:lightcyan">@Html.DisplayFor(modelItem => sportcentre.Address)     </td>
+                    <td style="background-color:lightcyan">@Html.DisplayFor(modelItem => sportcentre.Location)    </td>
+                    <td class="details-control"></td>
                 </tr>
 
+
             }
-    @*  foreach (var sportcentre in Model.sportCentres) *@
+            @*  foreach (var sportcentre in Model.sportCentres) *@
 
         </tbody>
     </table>
@@ -170,57 +169,57 @@
 
 @section Scripts {
     <script>
-        // function loadDetails(sportcentreId) 
-        // {
+        // Funzione per formattare la child row
+        function format(attivitaList) {
+            var html = '<table class="table table-sm"><thead><tr><th>Attività</th><th>Descrizione</th><th>Orario</th><th>Posti</th></tr></thead><tbody>';
 
-        //     // hide only the <tr> detail rows
-        //     $('tr[id^="details-row-"]').hide();
-
-        //     var url = '/AttivitaSportive/AttivitaIndexMasterDetail?handler=AttivitaDetailsPartial&scid='
-        //                 + encodeURIComponent(sportcentreId);
-
-        //     $.get(url, function (data) {
-        //         var container = document.getElementById('details-container-' + sportcentreId);
-        //         if (container) container.innerHTML = data;
-
-        //         var row = document.getElementById('details-row-' + sportcentreId);
-        //         if (row) row.style.display = 'table-row';
-
-        //         console.log(data);
-
-        //     }); 
-        // }
-
-
-            //al click su un bottone dettaglio si caricano i dettagli dell'attività sportiva 
-            //fa una get ajax che ritorna la partial che contiene i dati di dettaglio
-            //alla get si esegue OnGetAttivitaDetailsPartialAsync che ritorna la partial con i dati
-            //la partial viene aggiunta al div del caso e si rende visibile la riga che lo contiene
-            // use data-scid on the button and event delegation
-            $(document).on('click', '.btn-detail', function () {
-                var scid = $(this).data('scid');
-
-                // hide all the <tr> detail rows
-                $('tr[id^="details-row-"]').hide();
-
-                //url della partial
-                var url = '/AttivitaSportive/AttivitaIndexMasterDetail?handler=AttivitaDetailsPartial&scid='
-                          + encodeURIComponent(scid);
-
-                //get della partial,esegue OnGetAttivitaDetailsPartialAsync
-                $.get(url, function (data) 
-                {
-                    //la partial nel div
-                    var container = document.getElementById('details-container-' + scid);
-                    if (container) container.innerHTML = data;
-
-                    //riga che contiene il div resa visibile
-                    var row = document.getElementById('details-row-' + scid);
-                    if (row) row.style.display = 'table-row';    
-
-                    console.log(data);
-                });
+            attivitaList.forEach(function(a) {
+                html += '<tr><td>' + a.name + '</td><td>' + a.descrizione + '</td><td>' + a.orario + '</td><td>' + a.posti + '</td></tr>';
             });
-        
+            html += '</tbody></table>';
+            return html;
+        }
+
+        $(document).ready(function () {
+            var table = $('#sportcentresTable').DataTable({
+                paging: true,
+                searching: true,
+                ordering: true,
+                pageLength: 5,
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/it-IT.json'
+                }
+            });
+
+            // Gestione click sulla colonna dettaglio
+            $('#sportcentresTable tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row(tr);
+
+                if (row.child.isShown()) {
+                    // Chiudi se già aperto
+                    row.child.hide();
+                    tr.removeClass('shown');
+                } else {
+                    // Carica via AJAX le attività del centro
+                    // usa il testo della prima cella, più sicuro di row.data()
+                    var sportcentreName = tr.find('td').eq(0).text().trim();
+
+                    // route Razor Pages: pagina + ?handler=GetAttivita
+                    var url = '/AttivitaSportive/AttivitaIndexMasterDetail2?handler=GetAttivita&sportcentreName='
+                              + encodeURIComponent(sportcentreName);
+
+                    $.get(url, function(data) {
+                        console.log('sportcentreName:', sportcentreName);
+                        console.log('AJAX response:', data);
+                        row.child(format(data)).show();
+                        tr.addClass('shown');
+
+                    }).fail(function(xhr, status, err) {
+                        console.error('AJAX failed', status, err, xhr.responseText);
+                    });
+                }
+            });
+        });
     </script>
 }

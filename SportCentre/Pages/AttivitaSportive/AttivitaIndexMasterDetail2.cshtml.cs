@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace SportCentre.Pages.AttivitaSportive
 {
     [Authorize(Roles = "User,Admin")]
-    public class AttivitaIndexMasterDetailModel : PageModel
+    public class AttivitaIndexMasterDetail2Model : PageModel
     {
         private readonly SportCentre.Data.ApplicationDbContext _context;
         private readonly IConfiguration Configuration;
@@ -28,7 +28,7 @@ namespace SportCentre.Pages.AttivitaSportive
         public PaginatedList<SportCentre.Models.SportCentre>? sportcentres { get; set; }
 
 
-        public AttivitaIndexMasterDetailModel(SportCentre.Data.ApplicationDbContext context,IConfiguration configuration)
+        public AttivitaIndexMasterDetail2Model(SportCentre.Data.ApplicationDbContext context, IConfiguration configuration)
         {
             _context = context;
             Configuration = configuration;
@@ -39,8 +39,8 @@ namespace SportCentre.Pages.AttivitaSportive
 
         //
         //_______________________________________________________________________________________________________
-        public async Task<IActionResult> OnGetAsync(string searchsportcentre,string searchattivita,string searchdescrizione,
-                                      string searchorario,string searchposti,int? pageIndex)
+        public async Task<IActionResult> OnGetAsync(string searchsportcentre, string searchattivita, string searchdescrizione,
+                                      string searchorario, string searchposti, int? pageIndex)
         {
             CurrentFilterSportCentre = searchsportcentre;
             CurrentFilterAttività = searchattivita;
@@ -48,13 +48,9 @@ namespace SportCentre.Pages.AttivitaSportive
             CurrentFilterOrario = searchorario;
             CurrentFilterPosti = searchposti;
 
-
-
-
-            IQueryable <SportCentre.Models.SportCentre> sportcentresIQ  = _context.SportCentres 
+            IQueryable<SportCentre.Models.SportCentre> sportcentresIQ = _context.SportCentres
                                                                           .Include(sc => sc.sportCentreAttivita)
                                                                           .ThenInclude(sa => sa.Attivita);
-
 
             //filtri di ricerca
             if (!string.IsNullOrEmpty(searchsportcentre))
@@ -108,23 +104,24 @@ namespace SportCentre.Pages.AttivitaSportive
             return Page();
         }
 
-
-        //
-        //_______________________________________________________________________________________________________
-        public async Task<PartialViewResult> OnGetAttivitaDetailsPartialAsync(int scid)
+        //___________________________________________________________________________________________
+        // Endpoint AJAX per DataTables child rows
+        public async Task<JsonResult> OnGetGetAttivitaAsync(string sportcentreName)
         {
-            //var scattivita = await _context.SportCentreAttivita
-            //    .Include(sa => sa.Attivita)
-            //    .Where(sa => sa.SportCentreId == scid).ToListAsync();
-
             var attivita = await _context.SportCentreAttivita
-                                .Include(sa => sa.Attivita)
-                                .Where(sa => sa.SportCentreId == scid)
-                                .Select(sa => sa.Attivita)   // estrai solo le attività
-                                .ToListAsync();
+                .Include(sa => sa.Attivita)
+                .Where(sa => sa.SportCentre.Name == sportcentreName)
+                .Select(sa => new {
+                    name = sa.Attivita.Name,
+                    descrizione = sa.Attivita.Descrizione,
+                    orario = sa.Attivita.Orario,
+                    posti = sa.Attivita.Posti
+                })
+                .ToListAsync();
 
-
-            return Partial("AttivitaDetailsPartial", attivita);
+            return new JsonResult(attivita);
         }
+
+
     }
 }
