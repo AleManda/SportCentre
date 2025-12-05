@@ -25,7 +25,7 @@ namespace SportCentre.Pages.AttivitaSportive
         public string? CurrentFilterDescrizione { get; set; }
         public string? CurrentFilterOrario { get; set; }
         public string? CurrentFilterPosti { get; set; }
-        public PaginatedList<SportCentre.Models.SportCentre>? sportcentres { get; set; }
+        public List<SportCentre.Models.SportCentre>? sportcentres { get; set; }
 
 
         public AttivitaIndexMasterDetail2Model(SportCentre.Data.ApplicationDbContext context, IConfiguration configuration)
@@ -40,7 +40,7 @@ namespace SportCentre.Pages.AttivitaSportive
         //
         //_______________________________________________________________________________________________________
         public async Task<IActionResult> OnGetAsync(string searchsportcentre, string searchattivita, string searchdescrizione,
-                                      string searchorario, string searchposti, int? pageIndex)
+                                      string searchorario, string searchposti)
         {
             CurrentFilterSportCentre = searchsportcentre;
             CurrentFilterAttività = searchattivita;
@@ -96,10 +96,12 @@ namespace SportCentre.Pages.AttivitaSportive
                 }
             }
 
-            //Paginazione,si passa la query preparata con i filtri
-            var pageSize = Configuration.GetValue("PageSize", 11);
-            sportcentres = await PaginatedList<SportCentre.Models.SportCentre>.CreateAsync(
-                sportcentresIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
+            sportcentres = await sportcentresIQ.ToListAsync();
+
+            ////Paginazione,si passa la query preparata con i filtri
+            //var pageSize = Configuration.GetValue("PageSize", 11);
+            //sportcentres = await PaginatedList<SportCentre.Models.SportCentre>.CreateAsync(
+            //    sportcentresIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
 
             return Page();
         }

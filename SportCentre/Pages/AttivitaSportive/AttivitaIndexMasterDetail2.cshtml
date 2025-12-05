@@ -10,29 +10,46 @@
 <form asp-page="" method="get">
 
 
+    
+
+
+
+    <table id="sportcentresTable" class="table">
+        <thead>
+            <tr>
+                <th><label>Centro Sportivo</label></th>
+                <th>@Html.DisplayNameFor(modelItem => Model.sportcentres[0].Address)  </th>
+                <th>@Html.DisplayNameFor(modelItem => Model.sportcentres[0].Location)  </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var sportcentre in Model.sportcentres)
+            {
+                <tr>
+                    <td style="background-color:lightcyan;font:bold;color:red">@Html.DisplayFor(modelItem => sportcentre.Name)</td>
+                    <td style="background-color:lightcyan">@Html.DisplayFor(modelItem => sportcentre.Address)                   </td>
+                    <td style="background-color:lightcyan">@Html.DisplayFor(modelItem => sportcentre.Location)                  </td>
+                    <td style="background-color:lightblue"  class="details-control">Vedi Attività                                    </td>
+                </tr>
+
+
+            }
+
+        </tbody>
+    </table>
+
+    <hr />
+
     <table class="table">
         <thead>
             <tr>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th>
-                    Sport Centre
-                    @*  @Html.DisplayNameFor(model => Model.sportcentres[0].Name) *@
-                </th>
-            </tr>
-            <tr>
-                <th>
-
-                    <div class="form-actions no-color">
-                        <p>
-                            <input type="text" name="searchsportcentre" asp-for="CurrentFilterSportCentre" />
-                        </p>
-                    </div>
-
-                </th>
-            </tr>
+            <tr><label style="font:italic">Filtra per :</label></tr>
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => Model.sportcentres[0].sportCentreAttivita[0].Attivita)
@@ -49,117 +66,41 @@
                 <th></th>
             </tr>
             <tr>
-
                 <th>
                     <div class="form-actions no-color">
-                        <p>
-                            <input type="text" name="searchattivita" asp-for="CurrentFilterAttività" />
+                        <p><input type="text" name="searchattivita" asp-for="CurrentFilterAttività" /></p>
+                    </div>
 
-                        </p>
+                </th>
+                <th>
+                    <div class="form-actions no-color">
+                        <p><input type="text" name="searchdescrizione" asp-for="CurrentFilterDescrizione" /></p>
                     </div>
 
                 </th>
                 <th>
 
                     <div class="form-actions no-color">
-                        <p>
-                            <input type="text" name="searchdescrizione" asp-for="CurrentFilterDescrizione" />
-                        </p>
-                    </div>
-
-                </th>
-                <th>
-
-                    <div class="form-actions no-color">
-                        <p>
-                            <input type="text" name="searchorario" asp-for="CurrentFilterOrario" />
-
-                        </p>
+                        <p><input type="text" name="searchorario" asp-for="CurrentFilterOrario" /></p>
                     </div>
                 </th>
                 <th>
 
                     <div class="form-actions no-color">
-                        <p>
-                            <input type="text" name="searchposti" asp-for="CurrentFilterPosti" />
-
-                        </p>
+                        <p><input type="text" name="searchposti" asp-for="CurrentFilterPosti" /></p>
                     </div>
                 </th>
                 <th>
                     <div class="form-actions no-color">
-                        <p>
-                            <input type="submit" value="Search" class="btn-primary" />
-                        </p>
+                        <p><input type="submit" value="Search" class="btn-primary" /></p>
                     </div>
                 </th>
                 <th></th>
             </tr>
-        </tbody>
-    </table>
-
-
-
-    <table id="sportcentresTable" class="table">
-        <thead>
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-
-
-            @foreach (var sportcentre in Model.sportcentres)
-            {
-                <tr>
-                    <td style="background-color:lightcyan">
-@*                         <span style="font:bold">
-                            @Html.Label("name", sportcentre.Name, new { @style = "color:Red;font-weight:bold" }) 
-                        </span> *@
-                        @Html.DisplayFor(modelItem => sportcentre.Name)
-                    </td>
-                    <td style="background-color:lightcyan">@Html.DisplayFor(modelItem => sportcentre.Address)     </td>
-                    <td style="background-color:lightcyan">@Html.DisplayFor(modelItem => sportcentre.Location)    </td>
-                    <td class="details-control"></td>
-                </tr>
-
-
-            }
-            @*  foreach (var sportcentre in Model.sportCentres) *@
-
         </tbody>
     </table>
 </form>
 
-
-@{
-    var prevDisabled = !Model.sportcentres.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.sportcentres.HasNextPage ? "disabled" : "";
-}
-
-<a asp-page="./AttivitaIndex"
-   asp-route-searchsportcentre="@(Model.CurrentFilterSportCentre)"
-   asp-route-searchattivita="@(Model.CurrentFilterAttività)"
-   asp-route-searchdescrizione="@(Model.CurrentFilterDescrizione)"
-   asp-route-searchorario="@(Model.CurrentFilterOrario)"
-   asp-route-searchposti="@(Model.CurrentFilterPosti)"
-   asp-route-pageIndex="@(Model.sportcentres.PageIndex - 1)"
-   class="btn btn-primary @prevDisabled">
-    Previous
-</a>
-<a asp-page="./AttivitaIndex"
-   asp-route-searchsportcentre="@(Model.CurrentFilterSportCentre)"
-   asp-route-searchattivita="@(Model.CurrentFilterAttività)"
-   asp-route-searchdescrizione="@(Model.CurrentFilterDescrizione)"
-   asp-route-searchorario="@(Model.CurrentFilterOrario)"
-   asp-route-searchposti="@(Model.CurrentFilterPosti)"
-   asp-route-pageIndex="@(Model.sportcentres.PageIndex + 1)"
-   class="btn btn-primary @nextDisabled">
-    Next
-</a>
 <hr />
 
 <p>
@@ -168,7 +109,12 @@
 
 
 @section Scripts {
+
+
     <script>
+
+        //gestione click dettaglio
+
         // Funzione per formattare la child row
         function format(attivitaList) {
             var html = '<table class="table table-sm"><thead><tr><th>Attività</th><th>Descrizione</th><th>Orario</th><th>Posti</th></tr></thead><tbody>';
@@ -180,6 +126,8 @@
             return html;
         }
 
+        //_____________________________________________________________________________________________
+        //datatable 
         $(document).ready(function () {
             var table = $('#sportcentresTable').DataTable({
                 paging: true,
@@ -191,24 +139,29 @@
                 }
             });
 
+            //_____________________________________________________________________________________________
             // Gestione click sulla colonna dettaglio
             $('#sportcentresTable tbody').on('click', 'td.details-control', function () {
-                var tr = $(this).closest('tr');
-                var row = table.row(tr);
+                var tr = $(this).closest('tr'); //$(this) è il td su cui si è cliccato.closest('tr') becca tr del td
+                var row = table.row(tr); //restituisce oggetto datatable dal <tr>,con api .child,.show,ecc.
 
+                // Chiudi child row se già aperta
                 if (row.child.isShown()) {
-                    // Chiudi se già aperto
                     row.child.hide();
                     tr.removeClass('shown');
-                } else {
+                } 
+                else 
+                {
                     // Carica via AJAX le attività del centro
-                    // usa il testo della prima cella, più sicuro di row.data()
+                    // prende il nome dello sportcentre,usa il testo della prima cella della riga su 
+                    // cui si è cliccato , più sicuro di row.data()
                     var sportcentreName = tr.find('td').eq(0).text().trim();
 
                     // route Razor Pages: pagina + ?handler=GetAttivita
                     var url = '/AttivitaSportive/AttivitaIndexMasterDetail2?handler=GetAttivita&sportcentreName='
                               + encodeURIComponent(sportcentreName);
 
+                    //chiamata ajax,chiama GetAttivita nel pagemodel che restituisce lista attività come json in data
                     $.get(url, function(data) {
                         console.log('sportcentreName:', sportcentreName);
                         console.log('AJAX response:', data);
@@ -220,6 +173,9 @@
                     });
                 }
             });
+            //____onclick_________________________________________________________________________________________
         });
+        //____datatable_________________________________________________________________________________________
+
     </script>
 }
