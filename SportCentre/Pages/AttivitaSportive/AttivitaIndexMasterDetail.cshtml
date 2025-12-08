@@ -200,8 +200,8 @@
             $(document).on('click', '.btn-detail', function () {
                 var scid = $(this).data('scid');
 
-                // hide all the <tr> detail rows
-                $('tr[id^="details-row-"]').hide();
+                // // hide all the <tr> detail rows
+                // $('tr[id^="details-row-"]').hide();
 
                 //url della partial
                 var url = '/AttivitaSportive/AttivitaIndexMasterDetail?handler=AttivitaDetailsPartial&scid='
@@ -216,8 +216,8 @@
 
                     //riga che contiene il div resa visibile
                     var row = document.getElementById('details-row-' + scid);
-                    if (row) row.style.display = 'table-row';    
-
+                    if (row) row.style.display = 'table-row';
+                    console.log("row : " + 'details-row-' + scid);
                     console.log(data);
                 });
             });

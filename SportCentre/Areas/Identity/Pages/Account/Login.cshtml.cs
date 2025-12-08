@@ -88,6 +88,8 @@ namespace SportCentre.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
+        //
+        //___________________________________________________________________________________
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -105,6 +107,8 @@ namespace SportCentre.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
         }
 
+        //
+        //___________________________________________________________________________________
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -158,7 +162,8 @@ namespace SportCentre.Areas.Identity.Pages.Account
             return Page();
         }
 
-
+        //
+        //___________________________________________________________________________________
         public async Task<List<string>> getUserRoleAsync(string email)
         {
             List<string> roles = new();
@@ -176,6 +181,8 @@ namespace SportCentre.Areas.Identity.Pages.Account
             
         }
 
+        //
+        //___________________________________________________________________________________
         public void checkEmail()
         {
             if (!Regex.IsMatch(Input.Email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))

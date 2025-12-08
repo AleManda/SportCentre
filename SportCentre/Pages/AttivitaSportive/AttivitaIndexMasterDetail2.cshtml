@@ -68,26 +68,26 @@
             <tr>
                 <th>
                     <div class="form-actions no-color">
-                        <p><input type="text" name="searchattivita" asp-for="CurrentFilterAttività" /></p>
+                        <p><input type="text" id="searchAttivitaId" name="searchattivita" asp-for="CurrentFilterAttività" /></p>
                     </div>
 
                 </th>
                 <th>
                     <div class="form-actions no-color">
-                        <p><input type="text" name="searchdescrizione" asp-for="CurrentFilterDescrizione" /></p>
+                        <p><input type="text" id="searchdescrId" name="searchdescrizione" asp-for="CurrentFilterDescrizione" /></p>
                     </div>
 
                 </th>
                 <th>
 
                     <div class="form-actions no-color">
-                        <p><input type="text" name="searchorario" asp-for="CurrentFilterOrario" /></p>
+                        <p><input type="text" id="searchOrarioId" name="searchorario" asp-for="CurrentFilterOrario" /></p>
                     </div>
                 </th>
                 <th>
 
                     <div class="form-actions no-color">
-                        <p><input type="text" name="searchposti" asp-for="CurrentFilterPosti" /></p>
+                        <p><input type="text" id="searchPostiId" name="searchposti" asp-for="CurrentFilterPosti" /></p>
                     </div>
                 </th>
                 <th>
@@ -150,16 +150,29 @@
                     row.child.hide();
                     tr.removeClass('shown');
                 } 
-                else 
+                else    
                 {
                     // Carica via AJAX le attività del centro
                     // prende il nome dello sportcentre,usa il testo della prima cella della riga su 
                     // cui si è cliccato , più sicuro di row.data()
                     var sportcentreName = tr.find('td').eq(0).text().trim();
 
-                    // route Razor Pages: pagina + ?handler=GetAttivita
-                    var url = '/AttivitaSportive/AttivitaIndexMasterDetail2?handler=GetAttivita&sportcentreName='
-                              + encodeURIComponent(sportcentreName);
+
+                    //prendere i filtri negli input e passarli all'url
+
+                    // Prendi i valori dei filtri dagli input
+                    var attivita = $('#searchAttivitaId').val();
+                    var descrizione = $('#searchdescrId').val();
+                    var orario = $('#searchOrarioId').val();
+                    var posti = $('#searchPostiId').val();
+
+                    // Costruisci la query string con i filtri
+                    var url = '/AttivitaSportive/AttivitaIndexMasterDetail2?handler=GetAttivita'
+                        + '&sportcentreName=' + encodeURIComponent(sportcentreName)
+                        + '&searchattivita=' + encodeURIComponent(attivita)
+                        + '&searchdescrizione=' + encodeURIComponent(descrizione)
+                        + '&searchorario=' + encodeURIComponent(orario)
+                        + '&searchposti=' + encodeURIComponent(posti);
 
                     //chiamata ajax,chiama GetAttivita nel pagemodel che restituisce lista attività come json in data
                     $.get(url, function(data) {

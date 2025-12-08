@@ -64,28 +64,19 @@ namespace SportCentre.Pages.AttivitaSportive
 
             if (!string.IsNullOrEmpty(searchattivita))
             {
-                sportcentresIQ = _context.SportCentres
-                          .Where(sc => sc.sportCentreAttivita.Any(sa => sa.Attivita.Name.Contains(searchattivita)))
-                      .Include(sc => sc.sportCentreAttivita.Where(sa => sa.Attivita.Name.Contains(searchattivita)))
-                      .ThenInclude(sa => sa.Attivita);
+                sportcentresIQ = sportcentresIQ.Where(sc => sc.sportCentreAttivita.Any(sa => sa.Attivita.Name.Contains(searchattivita)));
             }
 
             if (!string.IsNullOrEmpty(searchdescrizione))
             {
-                sportcentresIQ = _context.SportCentres
-                          .Where(sc => sc.sportCentreAttivita.Any(sa => sa.Attivita.Descrizione.Contains(searchdescrizione)))
-                      .Include(sc => sc.sportCentreAttivita.Where(sa => sa.Attivita.Descrizione.Contains(searchdescrizione)))
-                      .ThenInclude(sa => sa.Attivita);
+                sportcentresIQ = sportcentresIQ.Where(sc => sc.sportCentreAttivita.Any(sa => sa.Attivita.Descrizione.Contains(searchdescrizione)));
             }
 
             if (!string.IsNullOrEmpty(searchorario))
             {
                 if (int.TryParse(searchorario, out int orarioValue))
                 {
-                    sportcentresIQ = _context.SportCentres
-                              .Where(sc => sc.sportCentreAttivita.Any(sa => sa.Attivita.Orario == orarioValue))
-                          .Include(sc => sc.sportCentreAttivita.Where(sa => sa.Attivita.Orario == orarioValue))
-                          .ThenInclude(sa => sa.Attivita);
+                    sportcentresIQ = sportcentresIQ.Where(sc => sc.sportCentreAttivita.Any(sa => sa.Attivita.Orario == orarioValue));
                 }
             }
 
@@ -93,10 +84,7 @@ namespace SportCentre.Pages.AttivitaSportive
             {
                 if (int.TryParse(searchposti, out int postiValue))
                 {
-                    sportcentresIQ = _context.SportCentres
-                            .Where(sc => sc.sportCentreAttivita.Any(sa => sa.Attivita.Posti >= postiValue))
-                        .Include(sc => sc.sportCentreAttivita.Where(sa => sa.Attivita.Posti >= postiValue))
-                        .ThenInclude(sa => sa.Attivita);
+                    sportcentresIQ = sportcentresIQ.Where(sc => sc.sportCentreAttivita.Any(sa => sa.Attivita.Posti == postiValue));
                 }
             }
 
