@@ -129,7 +129,7 @@ namespace SportCentre.Pages.AttivitaSportive
             {
                 if (int.TryParse(searchPosti, out int postiValue))
                 {
-                    attivitaIQ = attivitaIQ.Where(sa => sa.Posti == postiValue);
+                    attivitaIQ = attivitaIQ.Where(sa => sa.Posti >= postiValue);
                 }
             }
 
